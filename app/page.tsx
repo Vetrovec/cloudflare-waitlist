@@ -1,12 +1,20 @@
 import { redirect } from 'next/navigation';
+import { validateEmail } from './helpers';
+import { DB } from './db';
 
 export const runtime = 'edge';
 
 export default function Home() {
 	async function handleSubmit(data: FormData) {
 		'use server';
-		
 		const email = data.get('email');
+		if (typeof email !== 'string' || !validateEmail(email)) {
+			return;
+		}
+		await DB
+			.prepare('INSERT INTO Waitlist (Email, CreatedAt) VALUES (?, ?)')
+			.bind(email, new Date().toISOString())
+			.run();
 		redirect(`/${email}`);
 	}
 
