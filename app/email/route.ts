@@ -4,8 +4,8 @@ import { sendEmail } from '../lib/mail';
 
 export const runtime = 'edge';
 
-const errorRedirectUrl = 'http://127.0.0.1:8788/';
-const successRedirectUrl = 'http://127.0.0.1:8788/';
+const errorRedirectUrl = process.env.ERROR_URL as string;
+const successRedirectUrl = process.env.SUCCESS_URL as string;
 
 function validateEmail(email: string) {
 	const regex = /^[\w.-]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,63})+$/;
@@ -72,5 +72,8 @@ ON CONFLICT (Email) DO NOTHING`,
 		url.searchParams.set('error', 'internal_error');
 		return NextResponse.redirect(url, { status: 302 });
 	}
-	return NextResponse.redirect(successRedirectUrl, { status: 302 });
+	const url = new URL(successRedirectUrl.replace('{id}', email));
+	return NextResponse.redirect(url, {
+		status: 302,
+	});
 }

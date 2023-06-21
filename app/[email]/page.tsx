@@ -13,11 +13,13 @@ export default async function Email({ params }: { params: { email: string } }) {
 			<p>Not found</p>
 		);
 	}
+	const code = (row as any).Code;
 	const createdAt = new Date((row as any).CreatedAt);
 	return (
 		<main className="h-full flex flex-col justify-center items-center gap-4">
 			<h1 className="text-2xl">Waitlist</h1>
 			<p>You were signed up {createdAt.toLocaleDateString()}</p>
+			<p>Your code: {code}</p>
 		</main>
 	);
 }
