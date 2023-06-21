@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { DB } from "../db";
-import { sendEmail } from "../lib/mail";
+import { NextResponse } from 'next/server';
+import { DB } from '../db';
+import { sendEmail } from '../lib/mail';
 
 export const runtime = 'edge';
 
@@ -16,7 +16,7 @@ function generateCode() {
 	const array = new Uint32Array(4);
 	crypto.getRandomValues(array);
 	const sum = array.reduce((a, b) => a + b, 0);
-	const value = 0xFFFFFFFF + sum;
+	const value = 0xffffffff + sum;
 	return value.toString(36).toUpperCase();
 }
 
@@ -37,30 +37,37 @@ export async function POST(request: Request) {
 	try {
 		const code = generateCode();
 		const result = await DB.batch([
-			DB.prepare("PRAGMA foreign_keys = ON"),
-			DB.prepare(`
+			DB.prepare('PRAGMA foreign_keys = ON'),
+			DB.prepare(
+				`
 INSERT INTO Waitlist (Email, Code, ReferredBy, CreatedAt)
 SELECT ?, ?, Email, ? FROM Waitlist WHERE Code = ?
 UNION ALL
 SELECT ?, ?, NULL, ?
 WHERE NOT EXISTS (SELECT 1 FROM Waitlist WHERE Code = ?)
-ON CONFLICT (Email) DO NOTHING`)
-			.bind(email, code, new Date().toISOString(), referralCode, email, code, new Date().toISOString(), referralCode)
+ON CONFLICT (Email) DO NOTHING`,
+			).bind(
+				email,
+				code,
+				new Date().toISOString(),
+				referralCode,
+				email,
+				code,
+				new Date().toISOString(),
+				referralCode,
+			),
 		]);
 		if (result[1]?.meta?.changes > 0) {
 			await sendEmail({
-				personalizations: [
-					{ to: [{ email }] }
-				],
+				personalizations: [{ to: [{ email }] }],
 				from: { email: 'info@vetrovec.com' },
 				subject: 'Waitlist',
 				content: [
-					{ type: 'text/plain', value: `Your referral code is ${code}` }
+					{ type: 'text/plain', value: `Your referral code is ${code}` },
 				],
 			});
 		}
-	} catch (e) {
-		console.log(e);
+	} catch {
 		const url = new URL(errorRedirectUrl);
 		url.searchParams.set('error', 'internal_error');
 		return NextResponse.redirect(url, { status: 302 });

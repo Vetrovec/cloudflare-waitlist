@@ -2,7 +2,7 @@ import { DB } from "../db";
 
 export const runtime = 'edge';
 
-export default async function Email({ params }: { params: { email: string }}) {
+export default async function Email({ params }: { params: { email: string } }) {
 	const email = decodeURIComponent(params.email);
 	const statement = DB
 		.prepare('SELECT * FROM Waitlist WHERE Email = ?')
