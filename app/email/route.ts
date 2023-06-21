@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { DB } from "../db";
+import { sendEmail } from "../lib/mail";
 
 export const runtime = 'edge';
 
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
 	}
 	try {
 		const code = generateCode();
-		await DB.batch([
+		const result = await DB.batch([
 			DB.prepare("PRAGMA foreign_keys = ON"),
 			DB.prepare(`
 INSERT INTO Waitlist (Email, Code, ReferredBy, CreatedAt)
@@ -45,8 +46,21 @@ SELECT ?, ?, NULL, ?
 WHERE NOT EXISTS (SELECT 1 FROM Waitlist WHERE Code = ?)
 ON CONFLICT (Email) DO NOTHING`)
 			.bind(email, code, new Date().toISOString(), referralCode, email, code, new Date().toISOString(), referralCode)
-		])
-	} catch {
+		]);
+		if (result[1]?.meta?.changes > 0) {
+			await sendEmail({
+				personalizations: [
+					{ to: [{ email }] }
+				],
+				from: { email: 'info@vetrovec.com' },
+				subject: 'Waitlist',
+				content: [
+					{ type: 'text/plain', value: `Your referral code is ${code}` }
+				],
+			});
+		}
+	} catch (e) {
+		console.log(e);
 		const url = new URL(errorRedirectUrl);
 		url.searchParams.set('error', 'internal_error');
 		return NextResponse.redirect(url, { status: 302 });
