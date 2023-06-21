@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { validateEmail } from "../helpers";
 import { DB } from "../db";
 
 export const runtime = 'edge';
@@ -7,9 +6,23 @@ export const runtime = 'edge';
 const errorRedirectUrl = 'http://127.0.0.1:8788/';
 const successRedirectUrl = 'http://127.0.0.1:8788/';
 
+function validateEmail(email: string) {
+	const regex = /^[\w.-]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,63})+$/;
+	return regex.test(email);
+}
+
+function generateCode() {
+	const array = new Uint32Array(4);
+	crypto.getRandomValues(array);
+	const sum = array.reduce((a, b) => a + b, 0);
+	const value = 0xFFFFFFFF + sum;
+	return value.toString(36).toUpperCase();
+}
+
 export async function POST(request: Request) {
 	const data = await request.formData();
 	const email = data.get('email');
+	const referralCode = data.get('code');
 	if (!email || !errorRedirectUrl) {
 		const url = new URL(errorRedirectUrl);
 		url.searchParams.set('error', 'bad_request');
@@ -21,10 +34,18 @@ export async function POST(request: Request) {
 		return NextResponse.redirect(url, { status: 302 });
 	}
 	try {
-		const statement = DB
-			.prepare('INSERT INTO Waitlist (Email, CreatedAt) VALUES (?, ?)')
-			.bind(email, new Date().toISOString());
-		await statement.run();
+		const code = generateCode();
+		await DB.batch([
+			DB.prepare("PRAGMA foreign_keys = ON"),
+			DB.prepare(`
+INSERT INTO Waitlist (Email, Code, ReferredBy, CreatedAt)
+SELECT ?, ?, Email, ? FROM Waitlist WHERE Code = ?
+UNION ALL
+SELECT ?, ?, NULL, ?
+WHERE NOT EXISTS (SELECT 1 FROM Waitlist WHERE Code = ?)
+ON CONFLICT (Email) DO NOTHING`)
+			.bind(email, code, new Date().toISOString(), referralCode, email, code, new Date().toISOString(), referralCode)
+		])
 	} catch {
 		const url = new URL(errorRedirectUrl);
 		url.searchParams.set('error', 'internal_error');
