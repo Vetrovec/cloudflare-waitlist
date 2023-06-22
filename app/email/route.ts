@@ -58,7 +58,7 @@ ON CONFLICT (Email) DO NOTHING`,
 			),
 		]);
 		if (result[1]?.meta?.changes > 0) {
-			await sendEmail({
+			const emailResult = await sendEmail({
 				personalizations: [{ to: [{ email }] }],
 				from: { email: 'info@vetrovec.com' },
 				subject: 'Waitlist',
@@ -66,14 +66,20 @@ ON CONFLICT (Email) DO NOTHING`,
 					{ type: 'text/plain', value: `Your referral code is ${code}` },
 				],
 			});
+			if (!emailResult.success) {
+				console.error(
+					'Failed to send email',
+					JSON.stringify(emailResult.errors),
+				);
+			}
 		}
+		const url = new URL(successRedirectUrl.replace('{id}', email));
+		return NextResponse.redirect(url, {
+			status: 302,
+		});
 	} catch {
 		const url = new URL(errorRedirectUrl);
 		url.searchParams.set('error', 'internal_error');
 		return NextResponse.redirect(url, { status: 302 });
 	}
-	const url = new URL(successRedirectUrl.replace('{id}', email));
-	return NextResponse.redirect(url, {
-		status: 302,
-	});
 }
