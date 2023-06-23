@@ -6,17 +6,17 @@ export const runtime = 'edge';
 
 const errorRedirectUrl = process.env.ERROR_URL as string;
 const successRedirectUrl = process.env.SUCCESS_URL as string;
+const fromEmail = process.env.EMAIL_ADDRESS as string;
 
 function validateEmail(email: string) {
-	const regex = /^[\w.-]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,63})+$/;
+	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return regex.test(email);
 }
 
 function generateCode() {
 	const array = new Uint32Array(4);
 	crypto.getRandomValues(array);
-	const sum = array.reduce((a, b) => a + b, 0);
-	const value = 0xffffffff + sum;
+	const value = array.reduce((a, b) => a + b, 0xffffffff);
 	return value.toString(36).toUpperCase();
 }
 
@@ -58,19 +58,32 @@ ON CONFLICT (Email) DO NOTHING`,
 			),
 		]);
 		let emailResult = null;
-		if (result[1]?.meta?.changes > 0) {
+		const mailContentUrl = process.env.WELCOME_MAIL_URL;
+		if (result[1]?.meta?.changes > 0 && mailContentUrl) {
+			const mailContentResponse = await fetch(mailContentUrl);
+			const mailContent = await mailContentResponse.text();
 			emailResult = await sendEmail({
-				personalizations: [{ to: [{ email }] }],
-				from: { email: 'info@vetrovec.com' },
+				personalizations: [
+					{
+						to: [{ email }],
+						dkim_domain: process.env.DKIM_DOMAIN,
+						dkim_selector: process.env.DKIM_SELECTOR,
+						dkim_private_key: process.env.DKIM_PRIVATE_KEY,
+					},
+				],
+				from: { email: fromEmail },
 				subject: 'Waitlist',
 				content: [
-					{ type: 'text/plain', value: `Your referral code is ${code}` },
+					{
+						type: 'text/html',
+						value: mailContent,
+					},
 				],
 			});
 		}
 		const url = new URL(successRedirectUrl.replace('{id}', email));
 		if (emailResult && !emailResult.success) {
-			url.searchParams.set('email_error', JSON.stringify(emailResult.errors));
+			url.searchParams.set('email_error', JSON.stringify(emailResult));
 		}
 		return NextResponse.redirect(url, {
 			status: 302,

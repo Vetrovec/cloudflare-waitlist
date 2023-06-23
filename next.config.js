@@ -1,8 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	env: {
-		ERROR_URL: 'http://127.0.0.1:8788/',
-		SUCCESS_URL: 'http://127.0.0.1:8788/{id}',
+		WELCOME_MAIL_URL: '',
+		ERROR_URL: '',
+		SUCCESS_URL: '',
+		EMAIL_ADDRESS: '',
+		DKIM_DOMAIN: '',
+		DKIM_SELECTOR: '',
+		DKIM_PRIVATE_KEY: '',
 	},
 };
 
