@@ -15,8 +15,9 @@ export function Turnstile({ siteKey }: TurnstileProps) {
 				defer={true}
 			/>
 			<div
-				className="cf-turnstile"
+				className="cf-turnstile inline-flex"
 				data-sitekey={siteKey}
+				data-theme="light"
 			/>
 		</>
 	)
