@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	images: {
+		unoptimized: true,
+	},
 	env: {
 		WELCOME_MAIL_URL: '',
 		ERROR_URL: '',
