@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const referralUrl = process.env.REFERRAL_URL as string;
 
@@ -35,12 +36,12 @@ export function UserDetails({ email, code, createdAt }: UserDetailsProps) {
 						</button>
 					</div>
 					<span className="text-xs">or</span>
-					<a className="relative flex w-fit h-10 items-center pl-10 pr-6 py-2 border rounded-lg" href="/">
+					<Link className="relative flex w-fit h-10 items-center pl-10 pr-6 py-2 border rounded-lg" href="/">
 						<div className="absolute left-4">
 							<Image width={12} height={12} src="/icon-back.svg" alt="Back" />
 						</div>
 						<span className="text-slate-800 text-sm">Go back</span>
-					</a>
+					</Link>
 				</div>
 				<div className="flex flex-col items-center border-t pt-6 gap-2">
 					<span className="text-slate-800 text-xs">Get in touch</span>
