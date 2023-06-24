@@ -6,8 +6,10 @@ const nextConfig = {
 		SUCCESS_URL: '',
 		EMAIL_ADDRESS: '',
 		DKIM_DOMAIN: '',
-		DKIM_SELECTOR: '',
+		DKIM_SELECTOR: 'mailchannels',
 		DKIM_PRIVATE_KEY: '',
+		TURNSTILE_ENABLED: 'true',
+		TURNSTILE_SECRET_KEY: '',
 	},
 };
 

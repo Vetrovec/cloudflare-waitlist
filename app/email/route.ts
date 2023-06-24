@@ -7,6 +7,8 @@ export const runtime = 'edge';
 const errorRedirectUrl = process.env.ERROR_URL as string;
 const successRedirectUrl = process.env.SUCCESS_URL as string;
 const fromEmail = process.env.EMAIL_ADDRESS as string;
+const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY as string;
+const turnstileEnabled = process.env.TURNSTILE_ENABLED === 'true';
 
 function validateEmail(email: string) {
 	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,19 +22,45 @@ function generateCode() {
 	return value.toString(36).toUpperCase();
 }
 
+function error(errorCode: string) {
+	const url = new URL(errorRedirectUrl);
+	url.searchParams.set('error', 'bad_request');
+	return NextResponse.redirect(url, { status: 302 });
+}
+
 export async function POST(request: Request) {
 	const data = await request.formData();
 	const email = data.get('email');
 	const referralCode = data.get('code');
+	const token = data.get('cf-turnstile-response');
+	const ip = request.headers.get('CF-Connecting-IP');
+	if (turnstileEnabled && (!token || !ip)) {
+		return error('missing_captcha');
+	}
+	if (turnstileEnabled) {
+		const formData = new FormData();
+		formData.append('secret', turnstileSecretKey);
+		if (token) {
+			formData.append('response', token);
+		}
+		if (ip) {
+			formData.append('remoteip', ip);
+		}
+		const url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+		const result = await fetch(url, {
+			body: formData,
+			method: 'POST',
+		});
+		const outcome = await result.json();
+		if (!outcome.success) {
+			return error('invalid_captcha');
+		}
+	}
 	if (!email || !errorRedirectUrl) {
-		const url = new URL(errorRedirectUrl);
-		url.searchParams.set('error', 'bad_request');
-		return NextResponse.redirect(url, { status: 302 });
+		return error('bad_request');
 	}
 	if (typeof email !== 'string' || !validateEmail(email)) {
-		const url = new URL(errorRedirectUrl);
-		url.searchParams.set('error', 'invalid_email');
-		return NextResponse.redirect(url, { status: 302 });
+		return error('invalid_email');
 	}
 	try {
 		const code = generateCode();
@@ -89,8 +117,6 @@ ON CONFLICT (Email) DO NOTHING`,
 			status: 302,
 		});
 	} catch {
-		const url = new URL(errorRedirectUrl);
-		url.searchParams.set('error', 'internal_error');
-		return NextResponse.redirect(url, { status: 302 });
+		return error('internal_error');
 	}
 }
