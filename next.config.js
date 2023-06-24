@@ -4,6 +4,7 @@ const nextConfig = {
 		WELCOME_MAIL_URL: '',
 		ERROR_URL: '',
 		SUCCESS_URL: '',
+		REFERRAL_URL: '',
 		EMAIL_ADDRESS: '',
 		DKIM_DOMAIN: '',
 		DKIM_SELECTOR: 'mailchannels',

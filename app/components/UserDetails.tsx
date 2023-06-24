@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+const referralUrl = process.env.REFERRAL_URL as string;
+
 type UserDetailsProps = {
 	email: string;
 	code: string;
@@ -7,7 +9,7 @@ type UserDetailsProps = {
 };
 
 export function UserDetails({ email, code, createdAt }: UserDetailsProps) {
-	const referralUrl = `https://example.com?code=${code}`;
+	const url = referralUrl.replace('{code}', code);
 	return (
 		<div className="relative p-6 bg-white rounded-2xl">
 			<div
@@ -27,7 +29,7 @@ export function UserDetails({ email, code, createdAt }: UserDetailsProps) {
 				<div className="flex flex-col items-center px-2 py-4 border-t gap-4">
 					<span className="text-xs">Refer your friends and earn rewards</span>
 					<div className="relative w-full flex items-center">
-						<input className="w-full h-10 border p-2 pr-8 rounded-lg bg-slate-100 text-sm" disabled value={referralUrl} />
+						<input className="w-full h-10 border p-2 pr-8 rounded-lg bg-slate-100 text-sm" disabled value={url} />
 						<button className="absolute right-2">
 							<Image width={16} height={20} src="/icon-copy.svg" alt="Copy" />
 						</button>
