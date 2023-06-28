@@ -12,7 +12,7 @@ export default async function Email({ params }: { params: { email: string } }) {
     .where("Email", "=", email)
     .executeTakeFirst();
   if (!row) {
-    redirect("/?error=not-found");
+    redirect("/?error=not_found");
   }
   return (
     <main className="h-full flex flex-col justify-center items-center gap-4">
