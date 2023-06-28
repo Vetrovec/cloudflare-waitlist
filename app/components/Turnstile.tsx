@@ -8,7 +8,7 @@ type TurnstileProps = {
 
 export function Turnstile({ siteKey }: TurnstileProps) {
   return (
-    <>
+    <div style={{ height: "60px" }}>
       <Script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
         async={true}
@@ -19,6 +19,6 @@ export function Turnstile({ siteKey }: TurnstileProps) {
         data-sitekey={siteKey}
         data-theme="light"
       />
-    </>
+    </div>
   );
 }

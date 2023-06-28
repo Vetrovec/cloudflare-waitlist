@@ -5,6 +5,7 @@ export const runtime = "edge";
 
 export default function Home({ searchParams }: any) {
   const code = searchParams["code"];
+  const error = searchParams["error"];
   return (
     <main className="grid h-full grid-cols-2">
       <div className="p-16 bg-white">
@@ -36,7 +37,7 @@ export default function Home({ searchParams }: any) {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <SignUpForm code={code} />
+        <SignUpForm code={code} error={error} />
       </div>
     </main>
   );

@@ -2,9 +2,10 @@ import { Turnstile } from "./Turnstile";
 
 type SignUpFormProps = {
   code: string;
+  error?: string | null;
 };
 
-export function SignUpForm({ code }: SignUpFormProps) {
+export function SignUpForm({ code, error }: SignUpFormProps) {
   return (
     <div className="p-4 bg-white rounded-2xl">
       <form className="flex flex-col" action="/email" method="POST">
@@ -29,10 +30,7 @@ export function SignUpForm({ code }: SignUpFormProps) {
               name="email"
               placeholder="Enter your email"
             />
-            <div
-              className="flex w-full justify-center mb-4"
-              style={{ height: "60px" }}
-            >
+            <div className="flex w-full justify-center mb-4">
               <Turnstile siteKey="0x4AAAAAAAGe7L2vRCTnleMg" />
             </div>
             <input
@@ -40,6 +38,11 @@ export function SignUpForm({ code }: SignUpFormProps) {
               type="submit"
               value="Join"
             />
+            {error && (
+              <div className="mt-2 text-center text-red-500 text-sm">
+                {error}
+              </div>
+            )}
           </div>
         </div>
         <input hidden name="code" value={code} />
