@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { DB } from "../db";
+import { getDB } from "../db";
 import { sendEmail } from "../lib/mail";
 
 export const runtime = "edge";
@@ -64,30 +64,31 @@ export async function POST(request: Request) {
   }
   try {
     const code = generateCode();
-    const result = await DB.batch([
-      DB.prepare("PRAGMA foreign_keys = ON"),
-      DB.prepare(
-        `
-INSERT INTO Waitlist (Email, Code, ReferredBy, CreatedAt)
-SELECT ?, ?, Email, ? FROM Waitlist WHERE Code = ?
-UNION ALL
-SELECT ?, ?, NULL, ?
-WHERE NOT EXISTS (SELECT 1 FROM Waitlist WHERE Code = ?)
-ON CONFLICT (Email) DO NOTHING`
-      ).bind(
-        email,
-        code,
-        new Date().toISOString(),
-        referralCode,
-        email,
-        code,
-        new Date().toISOString(),
-        referralCode
-      ),
-    ]);
+
+    let referredBy = null;
+    if (typeof referralCode === "string") {
+      referredBy = await getDB()
+        .selectFrom("Waitlist")
+        .select("Email")
+        .where("Code", "=", referralCode)
+        .executeTakeFirst()
+        .then((row) => row?.Email ?? null);
+    }
+    const result = await getDB()
+      .insertInto("Waitlist")
+      .columns(["Email", "Code", "ReferredBy", "CreatedAt"])
+      .values({
+        Email: email,
+        Code: code,
+        ReferredBy: referredBy,
+        CreatedAt: new Date().toISOString(),
+      })
+      .onConflict((eb) => eb.column("Email").doNothing())
+      .execute();
+
     let emailResult = null;
     const mailContentUrl = process.env.WELCOME_MAIL_URL;
-    if (result[1]?.meta?.changes > 0 && mailContentUrl) {
+    if (result.length > 0 && mailContentUrl) {
       const mailContentResponse = await fetch(mailContentUrl);
       const mailContent = await mailContentResponse.text();
       emailResult = await sendEmail({
