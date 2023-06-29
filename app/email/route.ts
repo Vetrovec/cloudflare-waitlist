@@ -3,13 +3,14 @@ import { getDB } from "../db";
 import { sendEmail } from "../lib/mailchannels";
 import { generateCode, validateEmail } from "../lib/misc";
 import { verifyRequest } from "../lib/turnstile";
+import {
+  errorRedirectUrl,
+  fromEmail,
+  successRedirectUrl,
+  turnstileEnabled,
+} from "../config";
 
 export const runtime = "edge";
-
-const errorRedirectUrl = process.env.ERROR_URL as string;
-const successRedirectUrl = process.env.SUCCESS_URL as string;
-const fromEmail = process.env.EMAIL_ADDRESS as string;
-const turnstileEnabled = process.env.TURNSTILE_ENABLED === "true";
 
 function error(errorCode: string) {
   const url = new URL(errorRedirectUrl);

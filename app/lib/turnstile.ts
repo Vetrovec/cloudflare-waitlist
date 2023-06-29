@@ -1,4 +1,4 @@
-const turnstileSecretKey = process.env.TURNSTILE_SECRET_KEY as string;
+import { turnstileSecretKey } from "../config";
 
 export async function verifyRequest(
   formData: FormData,

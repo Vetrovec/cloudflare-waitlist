@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { referralUrl } from "../config";
 
-const referralUrl = process.env.REFERRAL_URL as string;
-
-type UserDetailsProps = {
+interface UserDetailsProps {
   email: string;
   code: string;
   createdAt: Date;
-};
+}
 
 export function UserDetails({ email, code, createdAt }: UserDetailsProps) {
   const url = referralUrl.replace("{code}", code);

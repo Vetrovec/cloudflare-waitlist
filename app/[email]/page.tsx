@@ -4,7 +4,13 @@ import { UserDetails } from "../components/UserDetails";
 
 export const runtime = "edge";
 
-export default async function Email({ params }: { params: { email: string } }) {
+interface EmailProps {
+  params: {
+    email: string;
+  };
+}
+
+export default async function Email({ params }: EmailProps) {
   const email = decodeURIComponent(params.email);
   const row = await getDB()
     .selectFrom("Waitlist")

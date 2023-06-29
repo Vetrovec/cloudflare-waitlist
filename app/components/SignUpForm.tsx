@@ -1,9 +1,10 @@
+import { turnstileEnabled } from "../config";
 import { Turnstile } from "./Turnstile";
 
-type SignUpFormProps = {
-  code: string;
-  error?: string | null;
-};
+interface SignUpFormProps {
+  code?: string;
+  error?: string;
+}
 
 export function SignUpForm({ code, error }: SignUpFormProps) {
   return (
@@ -30,9 +31,11 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
               name="email"
               placeholder="Enter your email"
             />
-            <div className="flex w-full justify-center mb-4">
-              <Turnstile siteKey="0x4AAAAAAAGe7L2vRCTnleMg" />
-            </div>
+            {turnstileEnabled && (
+              <div className="flex w-full justify-center mb-4">
+                <Turnstile siteKey="0x4AAAAAAAGe7L2vRCTnleMg" />
+              </div>
+            )}
             <input
               className="p-2 bg-blue-500 rounded-lg cursor-pointer text-white"
               type="submit"

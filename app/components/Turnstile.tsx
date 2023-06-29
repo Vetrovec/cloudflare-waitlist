@@ -1,10 +1,8 @@
-"use client";
-
 import Script from "next/script";
 
-type TurnstileProps = {
+interface TurnstileProps {
   siteKey: string;
-};
+}
 
 export function Turnstile({ siteKey }: TurnstileProps) {
   return (

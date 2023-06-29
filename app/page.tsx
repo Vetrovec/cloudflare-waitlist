@@ -3,7 +3,14 @@ import { SignUpForm } from "./components/SignUpForm";
 
 export const runtime = "edge";
 
-export default function Home({ searchParams }: any) {
+type HomeProps = {
+  searchParams: {
+    code?: string;
+    error?: string;
+  };
+};
+
+export default function Home({ searchParams }: HomeProps) {
   const code = searchParams["code"];
   const error = searchParams["error"];
   return (
