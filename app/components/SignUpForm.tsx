@@ -1,5 +1,6 @@
 import { turnstileEnabled } from "../config";
 import { Turnstile } from "./Turnstile";
+import messages from "../../messages.json";
 
 interface SignUpFormProps {
   code?: string;
@@ -12,16 +13,16 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
       <form className="flex flex-col" action="/email" method="POST">
         <div className="flex flex-col px-2 border-b">
           <h2 className="mb-1 font-semibold text-center text-2xl">
-            Join waitlist
+            {messages.signUpForm.title}
           </h2>
           <span className="mb-6 text-center text-xs text-slate-600">
-            and be the first to receive new exclusive updates!
+            {messages.signUpForm.subtitle}
           </span>
         </div>
         <div className="px-2">
           <div className="flex flex-col" style={{ width: "300px" }}>
             <label htmlFor="email" className="mt-6 mb-1 text-sm px-2">
-              Email
+              {messages.signUpForm.email}
             </label>
             <input
               required
@@ -29,7 +30,7 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
               type="email"
               id="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder={messages.signUpForm.emailPlaceholder}
             />
             {turnstileEnabled && (
               <div className="flex w-full justify-center mb-4">
@@ -39,7 +40,7 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
             <input
               className="p-2 bg-blue-500 rounded-lg cursor-pointer text-white"
               type="submit"
-              value="Join"
+              value={messages.signUpForm.submit}
             />
             {error && (
               <div className="mt-2 text-center text-red-500 text-sm">

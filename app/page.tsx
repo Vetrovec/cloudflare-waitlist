@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SignUpForm } from "./components/SignUpForm";
+import messages from "../messages.json";
 
 export const runtime = "edge";
 
@@ -28,12 +29,9 @@ export default function Home({ searchParams }: HomeProps) {
             alt="Logo"
           />
           <h1 className="mb-2 font-bold text-5xl whitespace-nowrap">
-            Become an Early Adopter
+            {messages.home.title}
           </h1>
-          <h3 className="text-2xl text-slate-500">
-            Don&apos;t miss out on this incredible upcoming opportunity, be part
-            of something big!
-          </h3>
+          <h3 className="text-2xl text-slate-500">{messages.home.subtitle}</h3>
           <Image
             className="mt-auto"
             width={520}

@@ -1,0 +1,21 @@
+{
+  "home": {
+    "title": "Become an Early Adopter",
+    "subtitle": "Don't miss out on this incredible upcoming opportunity, be part of something big!"
+  },
+  "signUpForm": {
+    "title": "Join waitlist",
+    "subtitle": "and be the first to receive new exclusive updates!",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "submit": "Join"
+  },
+  "userDetails": {
+    "title": "You're on the waitlist!",
+    "joinedAt": "joined the waitlist on",
+    "refer": "Refer your friends and earn rewards",
+    "or": "or",
+    "goBack": "Go back",
+    "getInTouch": "Get in touch"
+  }
+}
