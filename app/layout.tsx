@@ -22,6 +22,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             className="fixed top-0 right-0"
             href="https://github.com/Vetrovec/cloudflare-waitlist"
             target="_blank"
+            style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%)" }}
           >
             <Image
               width={80}

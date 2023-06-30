@@ -1,4 +1,4 @@
-import { turnstileEnabled } from "../config";
+import { turnstileEnabled, turnstileSiteKey } from "../env";
 import { Turnstile } from "./Turnstile";
 import messages from "../../messages.json";
 
@@ -34,7 +34,7 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
             />
             {turnstileEnabled && (
               <div className="flex w-full justify-center mb-4">
-                <Turnstile siteKey="0x4AAAAAAAGe7L2vRCTnleMg" />
+                <Turnstile siteKey={turnstileSiteKey} />
               </div>
             )}
             <input

@@ -8,7 +8,7 @@ import {
   fromEmail,
   successRedirectUrl,
   turnstileEnabled,
-} from "../config";
+} from "../env";
 
 export const runtime = "edge";
 

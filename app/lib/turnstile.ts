@@ -1,4 +1,4 @@
-import { turnstileSecretKey } from "../config";
+import { turnstileSecretKey } from "../env";
 
 export async function verifyRequest(
   formData: FormData,

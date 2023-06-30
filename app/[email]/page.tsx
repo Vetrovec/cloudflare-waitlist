@@ -21,7 +21,7 @@ export default async function Email({ params }: EmailProps) {
     redirect("/?error=not_found");
   }
   return (
-    <main className="h-full flex flex-col justify-center items-center gap-4">
+    <main className="h-full flex justify-center items-center">
       <UserDetails
         email={email}
         code={row.Code}

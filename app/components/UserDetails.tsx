@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { referralUrl } from "../config";
+import { referralUrl } from "../env";
 import messages from "../../messages.json";
 
 interface UserDetailsProps {
