@@ -1,16 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
-import { referralUrl } from "../env";
 import messages from "../../messages.json";
+import { env } from "../env.mjs";
 
 interface UserDetailsProps {
   email: string;
-  code: string;
+  referralCode: string;
   createdAt: Date;
 }
 
-export function UserDetails({ email, code, createdAt }: UserDetailsProps) {
-  const url = referralUrl.replace("{code}", code);
+export function UserDetails({
+  email,
+  referralCode,
+  createdAt,
+}: UserDetailsProps) {
+  const url = env.NEXT_PUBLIC_REFERRAL_URL.replace("{ref}", referralCode);
   return (
     <div className="relative p-6 bg-white rounded-2xl">
       <div

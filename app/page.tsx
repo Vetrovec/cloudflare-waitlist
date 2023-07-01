@@ -6,13 +6,13 @@ export const runtime = "edge";
 
 type HomeProps = {
   searchParams: {
-    code?: string;
+    ref?: string;
     error?: string;
   };
 };
 
 export default function Home({ searchParams }: HomeProps) {
-  const code = searchParams["code"];
+  const referralCode = searchParams["ref"];
   const error = searchParams["error"];
   return (
     <main className="grid h-full grid-cols-2">
@@ -42,7 +42,7 @@ export default function Home({ searchParams }: HomeProps) {
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <SignUpForm code={code} error={error} />
+        <SignUpForm referralCode={referralCode} error={error} />
       </div>
     </main>
   );

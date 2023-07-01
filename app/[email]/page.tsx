@@ -24,7 +24,7 @@ export default async function Email({ params }: EmailProps) {
     <main className="h-full flex justify-center items-center">
       <UserDetails
         email={email}
-        code={row.Code}
+        referralCode={row.Code}
         createdAt={new Date(row.CreatedAt)}
       />
     </main>

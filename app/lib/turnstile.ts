@@ -1,8 +1,7 @@
-import { turnstileSecretKey } from "../env";
-
 export async function verifyRequest(
   formData: FormData,
-  headers: Headers
+  headers: Headers,
+  secretKey: string
 ): Promise<boolean> {
   const token = formData.get("cf-turnstile-response");
   const ip = headers.get("CF-Connecting-IP");
@@ -10,7 +9,7 @@ export async function verifyRequest(
     return false;
   }
   const body = new FormData();
-  body.append("secret", turnstileSecretKey);
+  body.append("secret", secretKey);
   if (token) {
     body.append("response", token);
   }
@@ -20,8 +19,8 @@ export async function verifyRequest(
   const response = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
     {
-      body,
       method: "POST",
+      body,
     }
   );
   const outcome = await response.json();

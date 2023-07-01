@@ -1,13 +1,13 @@
-import { turnstileEnabled, turnstileSiteKey } from "../env";
 import { Turnstile } from "./Turnstile";
 import messages from "../../messages.json";
+import { env } from "../env.mjs";
 
 interface SignUpFormProps {
-  code?: string;
+  referralCode?: string;
   error?: string;
 }
 
-export function SignUpForm({ code, error }: SignUpFormProps) {
+export function SignUpForm({ referralCode, error }: SignUpFormProps) {
   return (
     <div className="p-4 bg-white rounded-2xl">
       <form className="flex flex-col" action="/email" method="POST">
@@ -32,9 +32,9 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
               name="email"
               placeholder={messages.signUpForm.emailPlaceholder}
             />
-            {turnstileEnabled && (
+            {env.NEXT_PUBLIC_TURNSTILE_ENABLED && (
               <div className="flex w-full justify-center mb-4">
-                <Turnstile siteKey={turnstileSiteKey} />
+                <Turnstile siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!} />
               </div>
             )}
             <input
@@ -49,7 +49,7 @@ export function SignUpForm({ code, error }: SignUpFormProps) {
             )}
           </div>
         </div>
-        <input hidden name="code" value={code} />
+        <input hidden name="ref" value={referralCode} />
       </form>
     </div>
   );

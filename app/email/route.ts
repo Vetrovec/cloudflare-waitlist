@@ -3,17 +3,12 @@ import { getDB } from "../db";
 import { sendEmail } from "../lib/mailchannels";
 import { generateCode, validateEmail } from "../lib/misc";
 import { verifyRequest } from "../lib/turnstile";
-import {
-  errorRedirectUrl,
-  fromEmail,
-  successRedirectUrl,
-  turnstileEnabled,
-} from "../env";
+import { env } from "../env.mjs";
 
 export const runtime = "edge";
 
 function error(errorCode: string) {
-  const url = new URL(errorRedirectUrl);
+  const url = new URL(env.NEXT_PUBLIC_ERROR_URL);
   url.searchParams.set("error", errorCode);
   return NextResponse.redirect(url, { status: 302 });
 }
@@ -21,15 +16,19 @@ function error(errorCode: string) {
 export async function POST(request: Request) {
   const formData = await request.formData();
   const email = formData.get("email");
-  const referralCode = formData.get("code");
+  const referralCode = formData.get("ref");
 
   if (typeof email !== "string") {
     return error("bad_request");
   }
-  if (turnstileEnabled) {
-    const isVerified = await verifyRequest(formData, request.headers);
+  if (env.NEXT_PUBLIC_TURNSTILE_ENABLED) {
+    const isVerified = await verifyRequest(
+      formData,
+      request.headers,
+      env.TURNSTILE_SECRET_KEY!
+    );
     if (!isVerified) {
-      return error("missing_captcha");
+      return error("invalid_captcha");
     }
   }
   if (!validateEmail(email)) {
@@ -58,21 +57,19 @@ export async function POST(request: Request) {
       .onConflict((eb) => eb.column("Email").doNothing())
       .execute();
 
-    let emailResponse = null;
-    const mailContentUrl = process.env.WELCOME_MAIL_URL;
-    if (result.length > 0 && mailContentUrl) {
-      const mailContentResponse = await fetch(mailContentUrl);
+    if (env.WELCOME_EMAIL_ENABLED && result.length > 0) {
+      const mailContentResponse = await fetch(env.WELCOME_EMAIL_CONTENT_URL!);
       const mailContent = await mailContentResponse.text();
-      emailResponse = await sendEmail({
+      await sendEmail({
         personalizations: [
           {
             to: [{ email }],
-            dkim_domain: process.env.DKIM_DOMAIN,
-            dkim_selector: process.env.DKIM_SELECTOR,
-            dkim_private_key: process.env.DKIM_PRIVATE_KEY,
+            dkim_domain: env.DKIM_DOMAIN,
+            dkim_selector: env.DKIM_SELECTOR,
+            dkim_private_key: env.DKIM_PRIVATE_KEY,
           },
         ],
-        from: { email: fromEmail, name: "Waitlist" },
+        from: { email: env.WELCOME_EMAIL_ADDRESS!, name: "Waitlist" },
         subject: "Welcome to waitlist!",
         content: [
           {
@@ -83,10 +80,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const url = new URL(successRedirectUrl.replace("{id}", email));
-    if (emailResponse && !emailResponse.success) {
-      url.searchParams.set("warning", "email_failed");
-    }
+    const url = new URL(env.NEXT_PUBLIC_SUCCESS_URL.replace("{id}", email));
     return NextResponse.redirect(url, {
       status: 302,
     });
