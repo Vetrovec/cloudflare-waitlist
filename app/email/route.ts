@@ -4,6 +4,7 @@ import { sendEmail } from "../lib/mailchannels";
 import { generateCode, validateEmail } from "../lib/misc";
 import { verifyRequest } from "../lib/turnstile";
 import { env } from "../env.mjs";
+import content from "../../content.json";
 
 export const runtime = "edge";
 
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
       .onConflict((eb) => eb.column("Email").doNothing())
       .execute();
 
-    if (env.WELCOME_EMAIL_ENABLED && result.length > 0) {
+    if (env.WELCOME_EMAIL_ENABLED && result[0]?.numInsertedOrUpdatedRows) {
       const mailContentResponse = await fetch(env.WELCOME_EMAIL_CONTENT_URL!);
       const mailContent = await mailContentResponse.text();
       await sendEmail({
@@ -69,8 +70,11 @@ export async function POST(request: Request) {
             dkim_private_key: env.DKIM_PRIVATE_KEY,
           },
         ],
-        from: { email: env.WELCOME_EMAIL_ADDRESS!, name: "Waitlist" },
-        subject: "Welcome to waitlist!",
+        from: {
+          email: env.WELCOME_EMAIL_ADDRESS!,
+          name: content.welcomeEmail.name,
+        },
+        subject: content.welcomeEmail.subject,
         content: [
           {
             type: "text/html",

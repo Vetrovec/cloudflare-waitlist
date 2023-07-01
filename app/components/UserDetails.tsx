@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import messages from "../../messages.json";
 import { env } from "../env.mjs";
+import content from "../../content.json";
 
 interface UserDetailsProps {
   email: string;
@@ -67,40 +68,25 @@ export function UserDetails({
             </span>
           </Link>
         </div>
-        <div className="flex flex-col items-center border-t pt-6 gap-2">
-          <span className="text-slate-800 text-xs">
-            {messages.userDetails.getInTouch}
-          </span>
-          <div className="flex gap-4">
-            <a href="https://twitter.com/StepanVetrovec" target="_blank">
-              <Image
-                width={24}
-                height={24}
-                src="/icon-twitter.png"
-                alt="Twitter"
-              />
-            </a>
-            <a href="https://github.com/Vetrovec" target="_blank">
-              <Image
-                width={24}
-                height={24}
-                src="/icon-github.png"
-                alt="Github"
-              />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/stepanvetrovec/"
-              target="_blank"
-            >
-              <Image
-                width={24}
-                height={24}
-                src="/icon-linkedin.png"
-                alt="Linkedin"
-              />
-            </a>
+        {content.socials.length > 0 && (
+          <div className="flex flex-col items-center border-t pt-6 gap-2">
+            <span className="text-slate-800 text-xs">
+              {messages.userDetails.getInTouch}
+            </span>
+            <div className="flex gap-4">
+              {content.socials.map((social) => (
+                <a key={social.name} href={social.url} target="_blank">
+                  <Image
+                    width={24}
+                    height={24}
+                    src={social.icon}
+                    alt={social.name}
+                  />
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
