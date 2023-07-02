@@ -3,6 +3,7 @@ import Link from "next/link";
 import messages from "../../messages.json";
 import { env } from "../env.mjs";
 import content from "../../content.json";
+import ClipboardButton from "./ClipboardButton";
 
 interface UserDetailsProps {
   email: string;
@@ -19,7 +20,7 @@ export function UserDetails({
   return (
     <div className="relative p-6 bg-white rounded-2xl">
       <div
-        className="absolute top-0 inset-x-1/2 flex justify-center items-center rounded-full bg-white"
+        className="absolute overflow-hidden top-0 inset-x-1/2 flex justify-center items-center rounded-full bg-white"
         style={{
           width: "80px",
           height: "80px",
@@ -51,9 +52,9 @@ export function UserDetails({
               disabled
               value={url}
             />
-            <button className="absolute right-2">
-              <Image width={16} height={20} src="/icon-copy.svg" alt="Copy" />
-            </button>
+            <div className="absolute right-2">
+              <ClipboardButton content={url} />
+            </div>
           </div>
           <span className="text-xs">{messages.userDetails.or}</span>
           <Link
@@ -61,7 +62,7 @@ export function UserDetails({
             href="/"
           >
             <div className="absolute left-4">
-              <Image width={12} height={12} src="/icon-back.svg" alt="Back" />
+              <Image width={12} height={12} src="/icons/back.svg" alt="Back" />
             </div>
             <span className="text-slate-800 text-sm">
               {messages.userDetails.goBack}

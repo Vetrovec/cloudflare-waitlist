@@ -10,17 +10,17 @@
     {
       "name": "Twitter",
       "url": "https://twitter.com/StepanVetrovec",
-      "icon": "/icon-twitter.png"
+      "icon": "/socials/twitter.png"
     },
     {
       "name": "Github",
       "url": "https://github.com/Vetrovec",
-      "icon": "/icon-github.png"
+      "icon": "/socials/github.png"
     },
     {
       "name": "Linkedin",
       "url": "https://www.linkedin.com/in/stepanvetrovec/",
-      "icon": "/icon-linkedin.png"
+      "icon": "/socials/linkedin.png"
     }
   ]
 }

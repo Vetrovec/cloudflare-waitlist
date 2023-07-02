@@ -9,4 +9,6 @@ body {
     theme("colors.blue.500") 0%,
     theme("colors.blue.900") 100%
   );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }

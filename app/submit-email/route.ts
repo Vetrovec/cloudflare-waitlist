@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getDB } from "../db";
-import { sendEmail } from "../lib/mailchannels";
-import { generateCode, validateEmail } from "../lib/misc";
-import { verifyRequest } from "../lib/turnstile";
+import { sendEmail } from "../helpers/mailchannels";
+import { generateCode, validateEmail } from "../helpers/misc";
+import { verifyRequest } from "../helpers/turnstile";
 import { env } from "../env.mjs";
 import content from "../../content.json";
 

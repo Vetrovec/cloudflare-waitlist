@@ -10,7 +10,7 @@ interface SignUpFormProps {
 export function SignUpForm({ referralCode, error }: SignUpFormProps) {
   return (
     <div className="p-4 bg-white rounded-2xl">
-      <form className="flex flex-col" action="/email" method="POST">
+      <form className="flex flex-col" action="/submit-email" method="POST">
         <div className="flex flex-col px-2 border-b">
           <h2 className="mb-1 font-semibold text-center text-2xl">
             {messages.signUpForm.title}
@@ -27,8 +27,9 @@ export function SignUpForm({ referralCode, error }: SignUpFormProps) {
             <input
               required
               className="h-10 border p-2 mb-4 rounded-lg text-sm"
-              type="email"
+              autoComplete="off"
               id="email"
+              type="email"
               name="email"
               placeholder={messages.signUpForm.emailPlaceholder}
             />
