@@ -9,7 +9,7 @@ import content from "../../content.json";
 export const runtime = "edge";
 
 function error(errorCode: string) {
-  const url = new URL(env.NEXT_PUBLIC_ERROR_URL);
+  const url = new URL(env.NEXT_PUBLIC_BASE_URL);
   url.searchParams.set("error", errorCode);
   return NextResponse.redirect(url, { status: 302 });
 }
@@ -18,10 +18,10 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const email = formData.get("email");
   const referralCode = formData.get("ref");
-
-  if (typeof email !== "string") {
-    return error("bad_request");
+  if (typeof email !== "string" || !validateEmail(email)) {
+    return error("invalid_email");
   }
+
   if (env.NEXT_PUBLIC_TURNSTILE_ENABLED) {
     const isVerified = await verifyRequest(
       formData,
@@ -31,9 +31,6 @@ export async function POST(request: Request) {
     if (!isVerified) {
       return error("invalid_captcha");
     }
-  }
-  if (!validateEmail(email)) {
-    return error("invalid_email");
   }
 
   try {
@@ -60,7 +57,10 @@ export async function POST(request: Request) {
 
     if (env.WELCOME_EMAIL_ENABLED && result[0]?.numInsertedOrUpdatedRows) {
       const mailContentResponse = await fetch(env.WELCOME_EMAIL_CONTENT_URL!);
-      const mailContent = await mailContentResponse.text();
+      const mailContentText = await mailContentResponse.text();
+      const formattedMail = mailContentText
+        .replaceAll("{email}", email)
+        .replaceAll("{base_url}", env.NEXT_PUBLIC_BASE_URL);
       await sendEmail({
         personalizations: [
           {
@@ -78,13 +78,13 @@ export async function POST(request: Request) {
         content: [
           {
             type: "text/html",
-            value: mailContent,
+            value: formattedMail,
           },
         ],
       });
     }
 
-    const url = new URL(env.NEXT_PUBLIC_SUCCESS_URL.replace("{id}", email));
+    const url = new URL(`/${email}`, env.NEXT_PUBLIC_BASE_URL);
     return NextResponse.redirect(url, {
       status: 302,
     });

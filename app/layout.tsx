@@ -3,7 +3,10 @@ import { Poppins } from "next/font/google";
 import Image from "next/image";
 import content from "../content.json";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata = {
   title: content.title,

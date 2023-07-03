@@ -16,7 +16,8 @@ export function UserDetails({
   referralCode,
   createdAt,
 }: UserDetailsProps) {
-  const url = env.NEXT_PUBLIC_REFERRAL_URL.replace("{ref}", referralCode);
+  const referralUrl = new URL(env.NEXT_PUBLIC_BASE_URL);
+  referralUrl.searchParams.set("ref", referralCode);
   return (
     <div className="relative p-6 bg-white rounded-2xl">
       <div
@@ -48,12 +49,12 @@ export function UserDetails({
           <span className="text-xs">{messages.userDetails.refer}</span>
           <div className="relative w-full flex items-center">
             <input
-              className="w-full h-10 border p-2 pr-8 rounded-lg bg-slate-100 text-sm"
+              className="w-full h-10 border p-2 pr-8 rounded-lg bg-slate-100 text-xs"
               disabled
-              value={url}
+              value={referralUrl.toString()}
             />
             <div className="absolute right-2">
-              <ClipboardButton content={url} />
+              <ClipboardButton content={referralUrl.toString()} />
             </div>
           </div>
           <span className="text-xs">{messages.userDetails.or}</span>

@@ -17,5 +17,11 @@
     "or": "or",
     "goBack": "Go back",
     "getInTouch": "Get in touch"
+  },
+  "errors": {
+    "fallback": "Unknown error has occurred",
+    "invalid_email": "Invalid email address",
+    "invalid_captcha": "Invalid captcha",
+    "internal_error": "Internal error has occurred"
   }
 }
