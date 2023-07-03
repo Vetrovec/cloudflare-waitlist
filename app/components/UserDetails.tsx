@@ -20,15 +20,14 @@ export function UserDetails({
   referralUrl.searchParams.set("ref", referralCode);
   return (
     <div className="relative p-6 bg-white rounded-2xl">
-      <div
-        className="absolute overflow-hidden top-0 inset-x-1/2 flex justify-center items-center rounded-full bg-white"
-        style={{
-          width: "80px",
-          height: "80px",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <Image width={72} height={72} src="/logo-small.png" alt="Logo" />
+      <div className="absolute top-0 inset-x-1/2 transform -translate-x-2/4 -translate-y-2/4 w-20 h-20 flex justify-center items-center rounded-full bg-white">
+        <Image
+          className="rounded-full"
+          width={72}
+          height={72}
+          src="/logo-small.png"
+          alt="Logo"
+        />
       </div>
       <div style={{ width: "300px" }}>
         <div className="pt-4">
@@ -59,7 +58,7 @@ export function UserDetails({
           </div>
           <span className="text-xs">{messages.userDetails.or}</span>
           <Link
-            className="relative flex w-fit h-10 items-center pl-10 pr-6 py-2 border rounded-lg"
+            className="relative flex w-fit h-10 items-center pl-10 pr-6 py-2 border rounded-lg transition-colors hover:bg-slate-100"
             href="/"
           >
             <div className="absolute left-4">

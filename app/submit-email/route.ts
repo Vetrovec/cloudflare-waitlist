@@ -56,10 +56,11 @@ export async function POST(request: Request) {
       .execute();
 
     if (env.WELCOME_EMAIL_ENABLED && result[0]?.numInsertedOrUpdatedRows) {
+      const displayName = email.split("@")[0];
       const mailContentResponse = await fetch(env.WELCOME_EMAIL_CONTENT_URL!);
       const mailContentText = await mailContentResponse.text();
       const formattedMail = mailContentText
-        .replaceAll("{email}", email)
+        .replaceAll("{display_name}", displayName)
         .replaceAll("{base_url}", env.NEXT_PUBLIC_BASE_URL);
       await sendEmail({
         personalizations: [
