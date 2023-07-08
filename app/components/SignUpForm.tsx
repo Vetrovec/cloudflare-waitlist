@@ -1,6 +1,6 @@
 import { Turnstile } from "./Turnstile";
 import messages from "../../messages.json";
-import { env } from "../env.mjs";
+import { env } from "../envClient.mjs";
 import { Suspense } from "react";
 
 interface SignUpFormProps {
@@ -23,13 +23,13 @@ export function SignUpForm({ referral }: SignUpFormProps) {
           name="email"
           placeholder={messages.signUpForm.emailPlaceholder}
         />
-        {env.NEXT_PUBLIC_TURNSTILE_ENABLED && (
+        {env.TURNSTILE.ENABLED && (
           <div className="flex w-full justify-center mb-4">
-            <Turnstile siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!} />
+            <Turnstile siteKey={env.TURNSTILE.SITE_KEY} />
           </div>
         )}
         <input
-          className="p-2 bg-blue-500 rounded-lg cursor-pointer text-white transition-colors hover:bg-blue-600"
+          className="p-2 bg-primary-500 rounded-lg cursor-pointer text-gray-50 transition-colors hover:bg-primary-600"
           type="submit"
           value={messages.signUpForm.submit}
         />

@@ -3,13 +3,13 @@ import { getDB } from "../db";
 import { sendEmail } from "../helpers/mailchannels";
 import { generateCode, validateEmail } from "../helpers/misc";
 import { verifyRequest } from "../helpers/turnstile";
-import { env } from "../env.mjs";
+import { env } from "../envServer.mjs";
 import content from "../../content.json";
 
 export const runtime = "edge";
 
 function error(errorCode: string) {
-  const url = new URL(env.NEXT_PUBLIC_BASE_URL);
+  const url = new URL(env.BASE_URL);
   url.searchParams.set("error", errorCode);
   return NextResponse.redirect(url, { status: 302 });
 }
@@ -22,11 +22,11 @@ export async function POST(request: Request) {
     return error("invalid_email");
   }
 
-  if (env.NEXT_PUBLIC_TURNSTILE_ENABLED) {
+  if (env.TURNSTILE.ENABLED) {
     const isVerified = await verifyRequest(
       formData,
       request.headers,
-      env.TURNSTILE_SECRET_KEY!
+      env.TURNSTILE.SECRET_KEY
     );
     if (!isVerified) {
       return error("invalid_captcha");
@@ -55,24 +55,26 @@ export async function POST(request: Request) {
       .onConflict((eb) => eb.column("Email").doNothing())
       .execute();
 
-    if (env.WELCOME_EMAIL_ENABLED && result[0]?.numInsertedOrUpdatedRows) {
+    if (env.WELCOME_EMAIL.ENABLED && result[0]?.numInsertedOrUpdatedRows) {
       const displayName = email.split("@")[0];
-      const mailContentResponse = await fetch(env.WELCOME_EMAIL_CONTENT_URL!);
+      const mailContentResponse = await fetch(env.WELCOME_EMAIL.CONTENT_URL);
       const mailContentText = await mailContentResponse.text();
       const formattedMail = mailContentText
         .replaceAll("{display_name}", displayName)
-        .replaceAll("{base_url}", env.NEXT_PUBLIC_BASE_URL);
+        .replaceAll("{base_url}", env.BASE_URL);
       await sendEmail({
         personalizations: [
           {
             to: [{ email }],
-            dkim_domain: env.DKIM_DOMAIN,
-            dkim_selector: env.DKIM_SELECTOR,
-            dkim_private_key: env.DKIM_PRIVATE_KEY,
+            ...(env.DKIM.ENABLED && {
+              dkim_domain: env.DKIM.DOMAIN,
+              dkim_selector: env.DKIM.SELECTOR,
+              dkim_private_key: env.DKIM.PRIVATE_KEY,
+            }),
           },
         ],
         from: {
-          email: env.WELCOME_EMAIL_ADDRESS!,
+          email: env.WELCOME_EMAIL.ADDRESS,
           name: content.welcomeEmail.name,
         },
         subject: content.welcomeEmail.subject,
@@ -85,11 +87,12 @@ export async function POST(request: Request) {
       });
     }
 
-    const url = new URL(`/${email}`, env.NEXT_PUBLIC_BASE_URL);
+    const url = new URL(`/${email}`, env.BASE_URL);
     return NextResponse.redirect(url, {
       status: 302,
     });
-  } catch {
+  } catch (e) {
+    console.error(e);
     return error("internal_error");
   }
 }

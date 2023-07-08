@@ -22,7 +22,7 @@ export default function Home({ searchParams }: HomeProps) {
   return (
     <main className="grid h-full grid-cols-2">
       <div
-        className="p-16 bg-white"
+        className="p-16 bg-base"
         style={{ clipPath: "ellipse(100% 160% at 0% 50%)" }}
       >
         <div className="flex h-full flex-col justify-center mx-auto">
@@ -36,19 +36,19 @@ export default function Home({ searchParams }: HomeProps) {
           <h1 className="mb-4 font-bold text-4xl whitespace-nowrap">
             {messages.home.title}
           </h1>
-          <h3 className="max-w-xl text-xl text-slate-700">
+          <h3 className="max-w-xl text-xl text-gray-700">
             {messages.home.subtitle}
           </h3>
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <div className="p-4 bg-white rounded-2xl">
+        <div className="p-4 bg-base rounded-2xl">
           <div className="flex flex-col">
             <div className="flex flex-col px-2 border-b">
               <h2 className="mb-1 font-semibold text-center text-2xl">
                 {messages.signUpForm.title}
               </h2>
-              <span className="mb-4 text-center text-xs text-slate-600">
+              <span className="mb-4 text-center text-xs text-gray-600">
                 {messages.signUpForm.subtitle}
               </span>
             </div>
