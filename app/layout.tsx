@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 import Image from "next/image";
 import content from "../content.json";
 
-const poppins = Poppins({
+const font = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -20,7 +20,7 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body className={font.className}>
         <div className="relative h-full">
           {content.showGithubBadge && (
             <a
