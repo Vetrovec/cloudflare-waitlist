@@ -22,6 +22,7 @@
     "fallback": "Unknown error has occurred",
     "invalid_email": "Invalid email address",
     "invalid_captcha": "Invalid captcha",
-    "internal_error": "Internal error has occurred"
+    "internal_error": "Internal error has occurred",
+    "not_found": "Email not found"
   }
 }

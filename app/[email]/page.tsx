@@ -21,12 +21,14 @@ export default async function Email({ params }: EmailProps) {
     redirect("/?error=not_found");
   }
   return (
-    <main className="h-full flex justify-center items-center">
-      <UserDetails
-        email={email}
-        referralCode={row.Code}
-        createdAt={new Date(row.CreatedAt)}
-      />
+    <main className="grid h-full">
+      <div className="flex p-10 justify-center items-center">
+        <UserDetails
+          email={email}
+          referralCode={row.Code}
+          createdAt={new Date(row.CreatedAt)}
+        />
+      </div>
     </main>
   );
 }

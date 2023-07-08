@@ -1,5 +1,5 @@
-import { SignUpForm } from "./components/SignUpForm";
 import Image from "next/image";
+import { SignUpForm } from "./components/SignUpForm";
 import messages from "../messages.json";
 
 export const runtime = "edge";
@@ -17,15 +17,15 @@ export default function Home({ searchParams }: HomeProps) {
   const errorMessage = !error
     ? null
     : error in messages.errors
-    ? messages.errors[error as keyof typeof messages.errors]
-    : messages.errors.fallback;
+      ? messages.errors[error as keyof typeof messages.errors]
+      : messages.errors.fallback;
   return (
-    <main className="grid h-full grid-cols-2">
+    <main className="grid h-full xl:grid-cols-2">
       <div
-        className="p-16 bg-base"
+        className="hidden xl:block p-16 bg-base"
         style={{ clipPath: "ellipse(100% 160% at 0% 50%)" }}
       >
-        <div className="flex h-full flex-col justify-center mx-auto">
+        <div className="h-full flex flex-col justify-center mx-auto">
           <Image
             className="mb-8"
             width={220}
@@ -41,7 +41,7 @@ export default function Home({ searchParams }: HomeProps) {
           </h3>
         </div>
       </div>
-      <div className="flex justify-center items-center">
+      <div className="flex p-10 justify-center items-center">
         <div className="p-4 bg-base rounded-2xl">
           <div className="flex flex-col">
             <div className="flex flex-col px-2 border-b">
@@ -56,7 +56,7 @@ export default function Home({ searchParams }: HomeProps) {
               <div style={{ width: "300px" }}>
                 <SignUpForm referral={referral} />
                 {errorMessage && (
-                  <div className="mt-4 text-center text-red-500 text-sm">
+                  <div className="mt-4 text-center text-error text-sm">
                     {errorMessage}
                   </div>
                 )}

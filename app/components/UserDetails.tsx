@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import messages from "../../messages.json";
+import ClipboardButton from "./ClipboardButton";
 import { env } from "../envClient.mjs";
 import content from "../../content.json";
-import ClipboardButton from "./ClipboardButton";
+import messages from "../../messages.json";
 
 interface UserDetailsProps {
   email: string;
@@ -19,7 +19,7 @@ export function UserDetails({
   const referralUrl = new URL(env.BASE_URL);
   referralUrl.searchParams.set("ref", referralCode);
   return (
-    <div className="relative p-6 bg-base rounded-2xl">
+    <div className="relative p-6 rounded-2xl mt-10 bg-base">
       <div className="absolute top-0 inset-x-1/2 transform -translate-x-2/4 -translate-y-2/4 w-20 h-20 flex justify-center items-center rounded-full bg-base">
         <Image
           className="rounded-full"

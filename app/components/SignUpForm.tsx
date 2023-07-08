@@ -1,7 +1,7 @@
-import { Turnstile } from "./Turnstile";
-import messages from "../../messages.json";
-import { env } from "../envClient.mjs";
 import { Suspense } from "react";
+import { Turnstile } from "./Turnstile";
+import { env } from "../envClient.mjs";
+import messages from "../../messages.json";
 
 interface SignUpFormProps {
   referral?: string;

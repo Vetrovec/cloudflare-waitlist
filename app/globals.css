@@ -5,6 +5,9 @@
 html,
 body {
   height: 100%;
+}
+
+body {
   background: linear-gradient(
     theme("colors.primary.500") 0%,
     theme("colors.primary.800") 100%

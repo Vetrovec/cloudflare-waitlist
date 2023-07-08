@@ -7,6 +7,7 @@ const tailwindConfig = {
     colors: {
       primary: colors.blue,
       gray: colors.gray,
+      error: colors.red[500],
       base: colors.white,
     },
   },
