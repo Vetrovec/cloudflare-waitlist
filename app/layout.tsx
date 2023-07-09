@@ -24,10 +24,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <div className="relative h-full">
           {content.showGithubBadge && (
             <a
-              className="fixed top-0 right-0"
+              className="fixed top-0 right-0 triangle-clip-path"
               href="https://github.com/Vetrovec/cloudflare-waitlist"
               target="_blank"
-              style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%)" }}
             >
               <Image
                 width={80}

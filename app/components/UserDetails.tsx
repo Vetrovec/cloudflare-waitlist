@@ -29,7 +29,7 @@ export function UserDetails({
           alt="Logo"
         />
       </div>
-      <div style={{ width: "300px" }}>
+      <div className="container-base-width">
         <div className="pt-4">
           <h2 className="mb-2 font-semibold text-2xl text-center">
             {messages.userDetails.title}

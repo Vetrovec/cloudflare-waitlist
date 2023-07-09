@@ -6,10 +6,9 @@ interface TurnstileProps {
 
 export function Turnstile({ siteKey }: TurnstileProps) {
   return (
-    <div style={{ height: "60px" }}>
+    <div className="turnstile-height">
       <Script
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-        async={true}
         defer={true}
       />
       <div

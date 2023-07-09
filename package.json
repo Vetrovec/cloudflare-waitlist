@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat --compatibility-date=2022-11-30",
     "build": "next build",
-    "dev": "wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat --compatibility-date=2022-11-30",
     "export": "next-on-pages",
     "lint": "next lint",
     "check-types": "tsc --noEmit"

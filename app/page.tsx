@@ -22,8 +22,7 @@ export default function Home({ searchParams }: HomeProps) {
   return (
     <main className="grid h-full xl:grid-cols-2">
       <div
-        className="hidden xl:block p-16 bg-base"
-        style={{ clipPath: "ellipse(100% 160% at 0% 50%)" }}
+        className="hidden xl:block p-16 bg-base background-clip-path"
       >
         <div className="h-full flex flex-col justify-center mx-auto">
           <Image
@@ -53,7 +52,7 @@ export default function Home({ searchParams }: HomeProps) {
               </span>
             </div>
             <div className="px-2">
-              <div style={{ width: "300px" }}>
+              <div className="container-base-width">
                 <SignUpForm referral={referral} />
                 {errorMessage && (
                   <div className="mt-4 text-center text-error text-sm">
