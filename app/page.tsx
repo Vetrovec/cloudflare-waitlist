@@ -17,13 +17,11 @@ export default function Home({ searchParams }: HomeProps) {
   const errorMessage = !error
     ? null
     : error in messages.errors
-      ? messages.errors[error as keyof typeof messages.errors]
-      : messages.errors.fallback;
+    ? messages.errors[error as keyof typeof messages.errors]
+    : messages.errors.fallback;
   return (
     <main className="grid h-full xl:grid-cols-2">
-      <div
-        className="hidden xl:block p-16 bg-base background-clip-path"
-      >
+      <div className="hidden xl:block p-16 bg-base background-clip-path">
         <div className="h-full flex flex-col justify-center mx-auto">
           <Image
             className="mb-8"

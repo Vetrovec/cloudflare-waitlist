@@ -7,6 +7,7 @@
     "build": "next build",
     "export": "next-on-pages",
     "lint": "next lint",
+    "format": "prettier --write app",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
