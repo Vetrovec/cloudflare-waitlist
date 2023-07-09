@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-	height: 100%;
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(
+    theme("colors.primary.500") 0%,
+    theme("colors.primary.800") 100%
+  );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.background-clip-path {
+  clip-path: ellipse(100% 160% at 0% 50%);
+}
+
+.triangle-clip-path {
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.container-base-width {
+  width: 300px;
+}
+
+.turnstile-height {
+  height: 60px;
 }

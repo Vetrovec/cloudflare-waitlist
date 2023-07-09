@@ -1,0 +1,7 @@
+compatibility_date = "2022-11-30"
+compatibility_flags = [ "nodejs_compat" ]
+
+[[d1_databases]]
+binding = "DB"
+database_name = ""
+database_id = ""

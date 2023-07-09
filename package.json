@@ -3,23 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "start": "wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat --compatibility-date=2022-11-30",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "export": "next-on-pages",
+    "lint": "next lint",
+    "format": "prettier --write app",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@cloudflare/next-on-pages": "^1.1.0",
+    "@cloudflare/workers-types": "^4.20230518.0",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5",
     "autoprefixer": "10.4.14",
-    "eslint": "8.43.0",
-    "eslint-config-next": "13.4.6",
-    "next": "13.4.6",
+    "kysely": "^0.25.0",
+    "kysely-d1": "^0.3.0",
+    "next": "^13.4.7",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.1.3"
+    "typescript": "5.1.3",
+    "wrangler": "^3.1.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.43.0",
+    "eslint-config-next": "13.4.2",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "2.8.8"
   }
 }

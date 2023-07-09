@@ -1,0 +1,26 @@
+{
+  "title": "Waitlist",
+  "description": "Join our waitlist today and get notified when we launch!",
+  "showGithubBadge": true,
+  "welcomeEmail": {
+    "name": "Waitlist",
+    "subject": "Welcome to waitlist!"
+  },
+  "socials": [
+    {
+      "name": "Twitter",
+      "url": "https://twitter.com/StepanVetrovec",
+      "icon": "/socials/twitter.png"
+    },
+    {
+      "name": "Github",
+      "url": "https://github.com/Vetrovec",
+      "icon": "/socials/github.png"
+    },
+    {
+      "name": "Linkedin",
+      "url": "https://www.linkedin.com/in/stepanvetrovec/",
+      "icon": "/socials/linkedin.png"
+    }
+  ]
+}
