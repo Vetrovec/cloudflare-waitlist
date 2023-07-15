@@ -4,7 +4,7 @@ interface TurnstileProps {
   siteKey: string;
 }
 
-export function Turnstile({ siteKey }: TurnstileProps) {
+export default function Turnstile({ siteKey }: TurnstileProps) {
   return (
     <div className="turnstile-height">
       <Script

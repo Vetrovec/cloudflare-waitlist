@@ -11,7 +11,7 @@ interface UserDetailsProps {
   createdAt: Date;
 }
 
-export function UserDetails({
+export default function UserDetails({
   email,
   referralCode,
   createdAt,

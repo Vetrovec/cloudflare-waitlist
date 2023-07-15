@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getDB } from "../db";
-import { UserDetails } from "../components/UserDetails";
+import UserDetails from "../components/UserDetails";
 
 export const runtime = "edge";
 
