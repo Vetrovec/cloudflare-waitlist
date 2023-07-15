@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import Image from "next/image";
+import { Metadata } from "next";
 import content from "../content.json";
 
 const font = Poppins({
@@ -8,9 +9,15 @@ const font = Poppins({
   weight: ["400", "500", "600", "700"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: content.title,
   description: content.description,
+  formatDetection: {
+    telephone: false,
+    date: false,
+    email: false,
+    address: false,
+  },
 };
 
 type RootLayoutProps = {
