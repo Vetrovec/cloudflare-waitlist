@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    let referredBy = null;
+    let referredBy: string | null = null;
     if (typeof referralCode === "string") {
       referredBy = await getDB()
         .selectFrom("Waitlist")
