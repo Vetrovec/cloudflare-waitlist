@@ -5,10 +5,13 @@ import { generateCode, validateEmail } from "../helpers/misc";
 import { verifyRequest } from "../helpers/turnstile";
 import { env } from "../envServer.mjs";
 import content from "../../content.json";
+import { SubmitEmailError } from "../constants/enums";
 
 export const runtime = "edge";
 
-function error(errorCode: string) {
+function error(
+  errorCode: (typeof SubmitEmailError)[keyof typeof SubmitEmailError]
+) {
   const url = new URL(env.BASE_URL);
   url.searchParams.set("error", errorCode);
   return NextResponse.redirect(url, { status: 302 });
@@ -19,7 +22,7 @@ export async function POST(request: Request) {
   const email = formData.get("email");
   const referralCode = formData.get("ref");
   if (typeof email !== "string" || !validateEmail(email)) {
-    return error("invalid_email");
+    return error(SubmitEmailError.internalError);
   }
 
   if (env.TURNSTILE.ENABLED) {
@@ -29,7 +32,7 @@ export async function POST(request: Request) {
       env.TURNSTILE.SECRET_KEY
     );
     if (!isVerified) {
-      return error("invalid_captcha");
+      return error(SubmitEmailError.invalidCaptcha);
     }
   }
 
@@ -93,13 +96,12 @@ export async function POST(request: Request) {
 
     const url = new URL(`/${email}`, env.BASE_URL);
     if (welcomeEmailError) {
-      url.searchParams.set("error", "welcome_email");
+      url.searchParams.set("error", SubmitEmailError.emailFailed);
     }
     return NextResponse.redirect(url, {
       status: 302,
     });
-  } catch (e) {
-    console.error(e);
-    return error("internal_error");
+  } catch {
+    return error(SubmitEmailError.internalError);
   }
 }

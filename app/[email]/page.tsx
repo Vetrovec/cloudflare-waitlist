@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getDB } from "../db";
 import UserDetails from "../components/UserDetails";
+import { SubmitEmailError } from "../constants/enums";
 
 export const runtime = "edge";
 
@@ -14,7 +15,8 @@ interface EmailProps {
 }
 
 export default async function Email({ params, searchParams }: EmailProps) {
-  const welcomeEmailError = searchParams["error"] === "welcome_email";
+  const welcomeEmailError =
+    searchParams["error"] === SubmitEmailError.emailFailed;
   const email = decodeURIComponent(params.email);
   const row = await getDB()
     .selectFrom("Waitlist")
@@ -22,7 +24,7 @@ export default async function Email({ params, searchParams }: EmailProps) {
     .where("Email", "=", email)
     .executeTakeFirst();
   if (!row) {
-    redirect("/?error=not_found");
+    redirect(`/?error=${SubmitEmailError.notFound}`);
   }
   return (
     <main className="grid h-full">
