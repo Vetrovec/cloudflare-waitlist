@@ -8,9 +8,13 @@ interface EmailProps {
   params: {
     email: string;
   };
+  searchParams: {
+    error?: string;
+  };
 }
 
-export default async function Email({ params }: EmailProps) {
+export default async function Email({ params, searchParams }: EmailProps) {
+  const welcomeEmailError = searchParams["error"] === "welcome_email";
   const email = decodeURIComponent(params.email);
   const row = await getDB()
     .selectFrom("Waitlist")
@@ -24,6 +28,7 @@ export default async function Email({ params }: EmailProps) {
     <main className="grid h-full">
       <div className="flex p-10 justify-center items-center">
         <UserDetails
+          welcomeEmailError={welcomeEmailError}
           email={email}
           referralCode={row.Code}
           createdAt={new Date(row.CreatedAt)}

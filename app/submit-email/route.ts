@@ -55,6 +55,7 @@ export async function POST(request: Request) {
       .onConflict((eb) => eb.column("Email").doNothing())
       .execute();
 
+    let welcomeEmailError = false;
     if (env.WELCOME_EMAIL.ENABLED && result[0]?.numInsertedOrUpdatedRows) {
       const displayName = email.split("@")[0];
       const mailContentResponse = await fetch(env.WELCOME_EMAIL.CONTENT_URL);
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
       const formattedMail = mailContentText
         .replaceAll("{display_name}", displayName)
         .replaceAll("{base_url}", env.BASE_URL);
-      await sendEmail({
+      const result = await sendEmail({
         personalizations: [
           {
             to: [{ email }],
@@ -85,9 +86,15 @@ export async function POST(request: Request) {
           },
         ],
       });
+      if (!result.success) {
+        welcomeEmailError = true;
+      }
     }
 
     const url = new URL(`/${email}`, env.BASE_URL);
+    if (welcomeEmailError) {
+      url.searchParams.set("error", "welcome_email");
+    }
     return NextResponse.redirect(url, {
       status: 302,
     });
