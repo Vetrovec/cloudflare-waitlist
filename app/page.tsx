@@ -1,10 +1,6 @@
-import dynamic from "next/dynamic";
 import Image from "next/image";
+import SignUpForm from "./components/SignUpForm";
 import messages from "../messages.json";
-
-const SignUpForm = dynamic(() => import("./components/SignUpForm"), {
-  ssr: false,
-});
 
 export const runtime = "edge";
 
