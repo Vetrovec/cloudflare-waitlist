@@ -90,6 +90,7 @@ export async function POST(request: Request) {
         ],
       });
       if (!result.success) {
+        console.log("Mailchannels send has failed", email, result.errors);
         welcomeEmailError = true;
       }
     }
@@ -101,7 +102,8 @@ export async function POST(request: Request) {
     return NextResponse.redirect(url, {
       status: 302,
     });
-  } catch {
+  } catch (err) {
+    console.log("Unexpected error has occured", err);
     return error(SubmitEmailError.internalError);
   }
 }
