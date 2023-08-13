@@ -2,6 +2,7 @@
   "title": "Waitlist",
   "description": "Join our waitlist today and get notified when we launch!",
   "showGithubBadge": true,
+  "captchaTheme": "light",
   "welcomeEmail": {
     "name": "Waitlist",
     "subject": "Welcome to waitlist!"
