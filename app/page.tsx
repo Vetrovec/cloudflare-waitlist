@@ -38,7 +38,7 @@ export default function Home({ searchParams }: HomeProps) {
           </h3>
         </div>
       </div>
-      <div className="flex p-10 justify-center items-center">
+      <div className="flex py-10 justify-center items-center">
         <div className="p-4 bg-base rounded-2xl">
           <div className="flex flex-col">
             <div className="flex flex-col px-2 border-b">

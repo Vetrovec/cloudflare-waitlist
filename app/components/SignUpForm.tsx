@@ -28,7 +28,7 @@ export default function SignUpForm({ referral }: SignUpFormProps) {
       {showEmailInput ? (
         <input
           required
-          className="h-10 border p-2 mb-4 rounded-lg text-sm placeholder-gray-400"
+          className="h-10 border p-2 mb-4 rounded-lg text-base text-gray-950 placeholder-gray-400"
           id="email"
           type="email"
           name="email"
