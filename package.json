@@ -6,6 +6,8 @@
     "start": "wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat --compatibility-date=2022-11-30",
     "build": "next build",
     "export": "next-on-pages",
+    "export:watch": "next-on-pages --watch",
+    "migrate": "wrangler d1 execute waitlist --local --file migrations/001_setup.sql",
     "lint": "next lint",
     "format": "prettier --write app",
     "check-types": "tsc --noEmit"

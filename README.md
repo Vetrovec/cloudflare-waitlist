@@ -25,7 +25,7 @@ Most phrases can be found in the `/messages.json` file. Some texts can be config
 
 **Links**
 
-Links containting socials can be found in `/content.json` file. Feel free to remove or add more links, just make sure to add the corresponding icons to `/public/socials` directory and keep the same 24x24 dimensions. You can also hide Github top right corner badge by changing *showGithubBadge* in `/content.json` to false.
+Links containting socials can be found in `/content.json` file. Feel free to remove or add more links, just make sure to add the corresponding icons to `/public/socials` directory and keep the same 24x24 dimensions. You can also hide Github top right corner badge by changing _showGithubBadge_ in `/content.json` to false.
 
 **Colors**
 
@@ -33,96 +33,111 @@ You can find used color palette in `/tailwind.config.mjs` file. Only default tai
 
 **Welcome email**
 
-Content of welcome email is located in `/public/welcome-email.html` file. You can either modify the text or replace the whole file with your own template. Keep in mind the email content should be self-contained document and it should not have any relative references. If you need to include an image, use absolute URL or base64 encoded image. You can use *{base_url}* variable to create absolute links.
+Content of welcome email is located in `/public/welcome-email.html` file. You can either modify the text or replace the whole file with your own template. Keep in mind the email content should be self-contained document and it should not have any relative references. If you need to include an image, use absolute URL or base64 encoded image. You can use _{base_url}_ variable to create absolute links.
 
-## Deployment
+## Deploy to Cloudflare
 
-To deploy this project to Cloudflare, you will need to have a Cloudflare account. Having custom domain is not necessary, but it is strongly recommended.
-You can choose one of two approaches for deployment, either publish this to git and connect it directly to Cloudflare, or build it locally and upload output to Cloudflare. First start with common steps, then proceed to the approach of your choice.
+Prerequisite is to have a Cloudflare account. Having custom domain is not necessary, but required for certain features and also strongly recommended. This section describes importing Git repository through Cloudflare, but you can also build this project locally and use Wrangler to upload it manually.
 
-**Setup Wrangler**
+**1. Fork this repository**
 
-1. Install Wrangler
+You will need to have this project in your own account. You can either fork this repository or create a new one and copy the files. Cloudflare supports importing only from Github and Gitlab at the time of writing.
 
-Either install globally or use npx.
+**2. Customize the project**
 
-``` bash
-$ npm install -g wrangler
-```
+Follow the customization steps above to customize the project to your liking.
 
-2. Login to Wrangler
+**3. Create D1 database**
 
-``` bash
-$ wrangler login
-```
+Go to Cloudflare dashboard and create a new D1 database. After creating the database, you will need to run setup migration to create necessary tables. Open file _migrations/001_setup.sql_, go to tab _Console_ in D1 dashboard and paste the content of the file into the console. Then execute the query.
 
-3. Create wrangler.toml from template
+**4. Add site to Turnstile (optional)**
 
-``` bash
-$ cp wrangler.toml.example wrangler.toml
-```
+This step requires custom domain. You can use Turnstile to prevent spam submissions. Go to Cloudflare dashboard and open Turnstile. Click on _Add site_ and follow the instructions. Save Site Key and Secret Key for later use.
 
-**Setup D1 database**
+**5. Set up DKIM records (optional)**
 
-1. Create a new D1 database
+Setting up DKIM requires you to generate a key pair and add the public key to your DNS records. Follow [this mailchannels article](https://support.mailchannels.com/hc/en-us/articles/7122849237389-Adding-a-DKIM-Signature) and save the private key for later use.
 
-``` bash
-$ wrangler d1 create <database-name>
-```
+**6. Create Cloudflare Pages project**
 
-2. Add database credentials to wrangler.toml
+Go to Cloudflare dashboard and create a new Pages project. Select your waitlist repository and begin setup. Select _Next.js_ as a framework preset. Then expand _Environment variables (advanced)_ and add the following variables:
 
-3. Run setup migration
+| Name                           | Value                            | Required |
+| ------------------------------ | -------------------------------- | -------- |
+| NODE_VERSION                   | 18                               | yes      |
+| DKIM_ENABLED                   | false/true                       | yes      |
+| DKIM_DOMAIN                    | _your domain_                    |
+| DKIM_PRIVATE_KEY               | _your private key_               |
+| DKIM_SELECTOR                  | mailchannels                     |
+| NEXT_PUBLIC_BASE_URL           | _your domain_                    | yes      |
+| NEXT_PUBLIC_TURNSTILE_ENABLED  | false/true                       | yes      |
+| NEXT_PUBLIC_TURNSTILE_SITE_KEY | _your site key_                  |
+| TURNSTILE_SECRET_KEY           | _your secret key_                |
+| WELCOME_EMAIL_ENABLED          | false/true                       | yes      |
+| WELCOME_EMAIL_ADDRESS          | _welcome sender address_         |
+| WELCOME_EMAIL_CONTENT_URL      | _your domain_/welcome-email.html |
 
-``` bash
-$ wrangler d1 execute <database-name> --file migrations/001_setup.sql  
-```
+If you don't have custom domain, use _project-name_.pages.dev as a base URL. You can see the domain in the project build setup under the _Project name_ field.
 
-**Add site to Turnstile (optional)**
+**7. Configure project functions**
 
-This step requires custom domain. You can use Turnstile captcha protection to prevent spam email joins. Simply Add new site in Turnstile console and save site key and secret for later use.
+Open your newly created project, go to _Settings_ tab and open _Functions_. Select compatibility date to **2022-11-30** and compatibility flags to **nodejs_compat**.Do this for both production and preview environments.
 
-**Setup DKIM (optional)**
+**8. Bind D1 database**
 
-This step requires custom domain. DKIM is used to prevent emails from being marked as spam.
-However, it is not necessary to setup DKIM, as it is not required for emails to be sent.
+In _Settings > Functions_, find _D1 database bindings_, open _Edit bindings_ and create binding with the following settings:
 
-### Connect Git
+| Name | D1 database          |
+| ---- | -------------------- |
+| DB   | _your database name_ |
 
-*This approach is not supported at the time of writing. Building projects with D1 binding fails. See [this issue](https://github.com/cloudflare/next-on-pages/issues/302) for more information.*
+Do this for both production and preview environments.
 
-### Local build and upload
+**9. Set up custom domain (optional)**
+
+Open _Custom domains_ tab, select your custom domain and follow the instructions.
+
+**10. Redeploy project**
+
+Go to _Deployments_ tab, find the latest production deployment and click on _Retry deployment_. After deployment is finished, your waitlist site should be up and running.
+
+## Local development
+
+Some features such as welcome email and Turnstile will not work in local development environment.
 
 **Install dependencies**
 
-Install necessary dependencies in the project root directory.
-
-``` bash
+```bash
 $ npm install
 ```
 
 **Configure local environment variables**
 
-Create .env file in the project root directory and fill in the necessary environment variables. Use .env.example as a template. You might need DKIM and Turnstile credentials from previous steps.
+Create .env file in the project root directory and fill in the necessary environment variables. Use .env.example as a template.
 
-``` bash
+```bash
 $ cp .env.example .env
+```
+
+**Run setup migration**
+
+```bash
+$ npm run migrate
 ```
 
 **Export project**
 
-After finishing all the steps above and finishing customizations, you can export the project to `.vercel` folder.
+You can use _npm run export:watch_ to run export in watch mode.
 
-``` bash
+```bash
 $ npm run export
 ```
 
-**Deploy project to pages**
+**Start dev server**
 
-Deploy the project to Cloudflare Pages using Wrangler. Do not forget to add required compatibility settings and environment variables to the project. You can find more information about Cloudflare Pages [here](https://www.npmjs.com/package/@cloudflare/next-on-pages#user-content-3-deploy-your-application-to-cloudflare-pages).
-
-``` bash
-$ wrangler pages deploy .vercel/output/static
+```bash
+$ npm run start
 ```
 
 ## License
