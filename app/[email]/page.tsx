@@ -19,9 +19,9 @@ export default async function Email({ params, searchParams }: EmailProps) {
     searchParams["error"] === SubmitEmailError.emailFailed;
   const email = decodeURIComponent(params.email);
   const row = await getDB()
-    .selectFrom("Waitlist")
+    .selectFrom("waitlist_entries")
     .selectAll()
-    .where("Email", "=", email)
+    .where("email", "=", email)
     .executeTakeFirst();
   if (!row) {
     redirect(`/?error=${SubmitEmailError.notFound}`);
@@ -32,8 +32,8 @@ export default async function Email({ params, searchParams }: EmailProps) {
         <UserDetails
           welcomeEmailError={welcomeEmailError}
           email={email}
-          referralCode={row.Code}
-          createdAt={new Date(row.CreatedAt)}
+          referralCode={row.code}
+          createdAt={new Date(row.created_at)}
         />
       </div>
     </main>

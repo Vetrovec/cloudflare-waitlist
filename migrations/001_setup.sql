@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS Waitlist (
-	Email TEXT PRIMARY KEY,
-	Code TEXT NOT NULL UNIQUE,
-	ReferredBy TEXT,
-	CreatedAt TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS waitlist_entries (
+	email TEXT PRIMARY KEY,
+	code TEXT NOT NULL UNIQUE,
+	referred_by TEXT,
+	created_at TEXT NOT NULL
 );

@@ -40,22 +40,22 @@ export async function POST(request: Request) {
     let referredBy: string | null = null;
     if (typeof referralCode === "string") {
       referredBy = await getDB()
-        .selectFrom("Waitlist")
-        .select("Email")
-        .where("Code", "=", referralCode)
+        .selectFrom("waitlist_entries")
+        .select("email")
+        .where("code", "=", referralCode)
         .executeTakeFirst()
-        .then((row) => row?.Email ?? null);
+        .then((row) => row?.email ?? null);
     }
     const result = await getDB()
-      .insertInto("Waitlist")
-      .columns(["Email", "Code", "ReferredBy", "CreatedAt"])
+      .insertInto("waitlist_entries")
+      .columns(["email", "code", "referred_by", "created_at"])
       .values({
-        Email: email,
-        Code: generateCode(),
-        ReferredBy: referredBy,
-        CreatedAt: new Date().toISOString(),
+        email: email,
+        code: generateCode(),
+        referred_by: referredBy,
+        created_at: new Date().toISOString(),
       })
-      .onConflict((eb) => eb.column("Email").doNothing())
+      .onConflict((eb) => eb.column("email").doNothing())
       .execute();
 
     let welcomeEmailError = false;

@@ -2,15 +2,15 @@ import type { D1Database } from "@cloudflare/workers-types";
 import { Kysely } from "kysely";
 import { D1Dialect } from "kysely-d1";
 
-interface Waitlist {
-  Email: string;
-  Code: string;
-  ReferredBy: string | null;
-  CreatedAt: string;
+interface WaitlistEntry {
+  email: string;
+  code: string;
+  referred_by: string | null;
+  created_at: string;
 }
 
 interface Database {
-  Waitlist: Waitlist;
+  waitlist_entries: WaitlistEntry;
 }
 
 let kysely: Kysely<Database>;
