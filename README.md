@@ -37,7 +37,7 @@ Content of welcome email is located in `/public/welcome-email.html` file. You ca
 
 ## Deploy to Cloudflare
 
-Prerequisite is to have a Cloudflare account. Having custom domain is not necessary, but required for certain features and also strongly recommended. This section describes importing Git repository through Cloudflare, but you can also build this project locally and use Wrangler to upload it manually.
+Prerequisite is to have a Cloudflare account. Having custom domain is not necessary, but required for certain features and also strongly recommended. The following steps describe importing Git repository through Cloudflare, but you can also build this project locally and use Wrangler to upload it manually.
 
 **1. Fork this repository**
 
@@ -67,9 +67,9 @@ Go to Cloudflare dashboard and create a new Pages project. Select your waitlist 
 | ------------------------------ | -------------------------------- | -------- |
 | NODE_VERSION                   | 18                               | yes      |
 | DKIM_ENABLED                   | false/true                       | yes      |
+| DKIM_SELECTOR                  | mailchannels                     |
 | DKIM_DOMAIN                    | _your domain_                    |
 | DKIM_PRIVATE_KEY               | _your private key_               |
-| DKIM_SELECTOR                  | mailchannels                     |
 | NEXT_PUBLIC_BASE_URL           | _your domain_                    | yes      |
 | NEXT_PUBLIC_TURNSTILE_ENABLED  | false/true                       | yes      |
 | NEXT_PUBLIC_TURNSTILE_SITE_KEY | _your site key_                  |
@@ -82,7 +82,9 @@ If you don't have custom domain, use _project-name_.pages.dev as a base URL. You
 
 **7. Configure project functions**
 
-Open your newly created project, go to _Settings_ tab and open _Functions_. Select compatibility date to **2022-11-30** and compatibility flags to **nodejs_compat**.Do this for both production and preview environments.
+Open your newly created project, go to _Settings_ tab and open _Functions_. Select compatibility date to **2022-11-30** and compatibility flags to **nodejs_compat**. Do this for both production and preview environments.
+
+You can find more information about deployment to Cloudflare Pages [here](https://developers.cloudflare.com/pages/framework-guides/deploy-a-nextjs-site/#3-deploy-your-application-to-cloudflare-pages).
 
 **8. Bind D1 database**
 
@@ -128,7 +130,7 @@ $ npm run migrate
 
 **Export project**
 
-You can use _npm run export:watch_ to run export in watch mode.
+You can also use **export:watch** to run the command in watch mode.
 
 ```bash
 $ npm run export
