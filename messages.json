@@ -16,7 +16,8 @@
     "refer": "Refer your friends and earn rewards",
     "or": "or",
     "goBack": "Go back",
-    "getInTouch": "Get in touch"
+    "getInTouch": "Get in touch",
+    "welcomeEmailError": "Failed to send welcome email"
   },
   "errors": {
     "fallback": "Unknown error has occurred",

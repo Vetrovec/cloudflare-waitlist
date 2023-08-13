@@ -6,12 +6,14 @@ import content from "../../content.json";
 import messages from "../../messages.json";
 
 interface UserDetailsProps {
+  welcomeEmailError?: boolean;
   email: string;
   referralCode: string;
   createdAt: Date;
 }
 
 export default function UserDetails({
+  welcomeEmailError,
   email,
   referralCode,
   createdAt,
@@ -44,6 +46,13 @@ export default function UserDetails({
             </span>
           </div>
         </div>
+        {welcomeEmailError && (
+          <div className="px-2 py-4 border-t">
+            <div className="text-center text-error text-xs">
+              {messages.userDetails.welcomeEmailError}
+            </div>
+          </div>
+        )}
         <div className="flex flex-col items-center px-2 py-4 border-t gap-4">
           <span className="text-xs">{messages.userDetails.refer}</span>
           <div className="relative w-full flex items-center">

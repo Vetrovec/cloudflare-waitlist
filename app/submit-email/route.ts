@@ -5,10 +5,13 @@ import { generateCode, validateEmail } from "../helpers/misc";
 import { verifyRequest } from "../helpers/turnstile";
 import { env } from "../envServer.mjs";
 import content from "../../content.json";
+import { SubmitEmailError } from "../constants/enums";
 
 export const runtime = "edge";
 
-function error(errorCode: string) {
+function error(
+  errorCode: (typeof SubmitEmailError)[keyof typeof SubmitEmailError]
+) {
   const url = new URL(env.BASE_URL);
   url.searchParams.set("error", errorCode);
   return NextResponse.redirect(url, { status: 302 });
@@ -19,7 +22,7 @@ export async function POST(request: Request) {
   const email = formData.get("email");
   const referralCode = formData.get("ref");
   if (typeof email !== "string" || !validateEmail(email)) {
-    return error("invalid_email");
+    return error(SubmitEmailError.internalError);
   }
 
   if (env.TURNSTILE.ENABLED) {
@@ -29,32 +32,33 @@ export async function POST(request: Request) {
       env.TURNSTILE.SECRET_KEY
     );
     if (!isVerified) {
-      return error("invalid_captcha");
+      return error(SubmitEmailError.invalidCaptcha);
     }
   }
 
   try {
-    let referredBy = null;
+    let referredBy: string | null = null;
     if (typeof referralCode === "string") {
       referredBy = await getDB()
-        .selectFrom("Waitlist")
-        .select("Email")
-        .where("Code", "=", referralCode)
+        .selectFrom("waitlist_entries")
+        .select("email")
+        .where("code", "=", referralCode)
         .executeTakeFirst()
-        .then((row) => row?.Email ?? null);
+        .then((row) => row?.email ?? null);
     }
     const result = await getDB()
-      .insertInto("Waitlist")
-      .columns(["Email", "Code", "ReferredBy", "CreatedAt"])
+      .insertInto("waitlist_entries")
+      .columns(["email", "code", "referred_by", "created_at"])
       .values({
-        Email: email,
-        Code: generateCode(),
-        ReferredBy: referredBy,
-        CreatedAt: new Date().toISOString(),
+        email: email,
+        code: generateCode(),
+        referred_by: referredBy,
+        created_at: new Date().toISOString(),
       })
-      .onConflict((eb) => eb.column("Email").doNothing())
+      .onConflict((eb) => eb.column("email").doNothing())
       .execute();
 
+    let welcomeEmailError = false;
     if (env.WELCOME_EMAIL.ENABLED && result[0]?.numInsertedOrUpdatedRows) {
       const displayName = email.split("@")[0];
       const mailContentResponse = await fetch(env.WELCOME_EMAIL.CONTENT_URL);
@@ -62,7 +66,7 @@ export async function POST(request: Request) {
       const formattedMail = mailContentText
         .replaceAll("{display_name}", displayName)
         .replaceAll("{base_url}", env.BASE_URL);
-      await sendEmail({
+      const result = await sendEmail({
         personalizations: [
           {
             to: [{ email }],
@@ -85,14 +89,19 @@ export async function POST(request: Request) {
           },
         ],
       });
+      if (!result.success) {
+        welcomeEmailError = true;
+      }
     }
 
     const url = new URL(`/${email}`, env.BASE_URL);
+    if (welcomeEmailError) {
+      url.searchParams.set("error", SubmitEmailError.emailFailed);
+    }
     return NextResponse.redirect(url, {
       status: 302,
     });
-  } catch (e) {
-    console.error(e);
-    return error("internal_error");
+  } catch {
+    return error(SubmitEmailError.internalError);
   }
 }
