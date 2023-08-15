@@ -9,6 +9,7 @@ const tailwindConfig = {
       gray: colors.gray,
       error: colors.red[500],
       base: colors.white,
+      transparent: colors.transparent,
     },
   },
   plugins: [],
