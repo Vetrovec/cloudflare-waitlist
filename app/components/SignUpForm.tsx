@@ -15,12 +15,19 @@ export default function SignUpForm({ referral }: SignUpFormProps) {
   // https://github.com/vercel/next.js/issues/51816
   const [showEmailInput, setShowEmailInput] = useState(false);
 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   useEffect(() => {
     setShowEmailInput(true);
   }, []);
 
   return (
-    <form className="flex flex-col" action="/submit-email" method="POST">
+    <form
+      className="flex flex-col"
+      action="/submit-email"
+      method="POST"
+      onSubmit={() => setIsSubmitted(true)}
+    >
       <input hidden name="ref" value={referral} />
       <label htmlFor="email" className="mt-4 mb-1 text-sm px-2">
         {messages.signUpForm.email}
@@ -32,6 +39,7 @@ export default function SignUpForm({ referral }: SignUpFormProps) {
           id="email"
           type="email"
           name="email"
+          disabled={isSubmitted}
           placeholder={messages.signUpForm.emailPlaceholder}
         />
       ) : (
@@ -44,11 +52,19 @@ export default function SignUpForm({ referral }: SignUpFormProps) {
           <Turnstile siteKey={env.TURNSTILE.SITE_KEY} />
         </div>
       )}
-      <input
-        className="p-2 bg-primary-500 rounded-lg cursor-pointer text-gray-50 transition-colors hover:bg-primary-600"
+      <button
+        className="relative h-10 p-2 bg-primary-500 rounded-lg cursor-pointer text-gray-50 transition-colors enabled:hover:bg-primary-600 disabled:bg-primary-400 disabled:cursor-default"
+        disabled={isSubmitted}
         type="submit"
-        value={messages.signUpForm.submit}
-      />
+      >
+        {messages.signUpForm.submit}
+        {isSubmitted && (
+          <div
+            role="status"
+            className="absolute right-2 top-2 w-6 h-6 rounded-full animate-spin border-4 border-solid border-gray-50 border-t-transparent"
+          />
+        )}
+      </button>
     </form>
   );
 }
