@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const email = formData.get("email");
   const referralCode = formData.get("ref");
   if (typeof email !== "string" || !validateEmail(email)) {
-    return error(SubmitEmailError.internalError);
+    return error(SubmitEmailError.invalidEmail);
   }
 
   if (env.TURNSTILE.ENABLED) {

@@ -39,7 +39,7 @@ export default function SignUpForm({ referral }: SignUpFormProps) {
           id="email"
           type="email"
           name="email"
-          disabled={isSubmitted}
+          readOnly={isSubmitted}
           placeholder={messages.signUpForm.emailPlaceholder}
         />
       ) : (
