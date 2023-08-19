@@ -22,7 +22,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/locales/*": ["./locales/*"],
-      "@/content.json": ["./content.json"]
+      "@/app-config.json": ["./app-config.json"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

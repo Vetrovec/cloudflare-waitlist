@@ -1,5 +1,5 @@
 import Script from "next/script";
-import content from "@/content.json";
+import appConfig from "@/app-config.json";
 
 interface TurnstileProps {
   siteKey: string;
@@ -15,7 +15,7 @@ export default function Turnstile({ siteKey }: TurnstileProps) {
       <div
         className="cf-turnstile inline-flex"
         data-sitekey={siteKey}
-        data-theme={content.captchaTheme}
+        data-theme={appConfig.captchaTheme}
       />
     </div>
   );

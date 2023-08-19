@@ -2,7 +2,7 @@ import "../globals.css";
 import { Metadata } from "next";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
-import content from "@/content.json";
+import appConfig from "@/app-config.json";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -10,8 +10,8 @@ const font = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: content.title,
-  description: content.description,
+  title: appConfig.title,
+  description: appConfig.description,
   formatDetection: {
     telephone: false,
     date: false,
@@ -29,7 +29,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={font.className}>
         <div className="relative h-full">
-          {content.showGithubBadge && (
+          {appConfig.showGithubBadge && (
             <a
               className="fixed top-0 right-0 triangle-clip-path"
               href="https://github.com/Vetrovec/cloudflare-waitlist"
