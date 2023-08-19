@@ -1,5 +1,5 @@
 import Script from "next/script";
-import content from "../content.json";
+import content from "@/content.json";
 
 interface TurnstileProps {
   siteKey: string;

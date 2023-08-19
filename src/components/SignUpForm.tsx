@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Turnstile from "./Turnstile";
 import { env } from "@/env.client.mjs";
-import messages from "@/dictionaries/en.json";
+import messages from "@/locales/en.json";
 
 interface SignUpFormProps {
   referral?: string;

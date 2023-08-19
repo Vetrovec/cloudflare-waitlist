@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { convertToBoolean } from "./helpers/misc";
+import { convertToBoolean } from "./env.common.mjs";
 
 const schema = z.object({
   BASE_URL: z.string().url(),

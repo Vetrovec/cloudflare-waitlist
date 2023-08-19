@@ -5,7 +5,7 @@ import { SubmitEmailError } from "@/constants/enums";
 import { sendEmail } from "@/helpers/mailchannels";
 import { generateCode, validateEmail } from "@/helpers/misc";
 import { verifyRequest } from "@/helpers/turnstile";
-import content from "../../content.json";
+import content from "@/content.json";
 
 export const runtime = "edge";
 

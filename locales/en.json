@@ -16,14 +16,14 @@
     "refer": "Refer your friends and earn rewards",
     "or": "or",
     "goBack": "Go back",
-    "getInTouch": "Get in touch",
-    "welcomeEmailError": "Failed to send welcome email"
+    "getInTouch": "Get in touch"
   },
   "errors": {
     "fallback": "Unknown error has occurred",
     "invalid_email": "Invalid email address",
     "invalid_captcha": "Invalid captcha",
     "internal_error": "Internal error has occurred",
-    "not_found": "Email not found"
+    "not_found": "Email not found",
+    "email_failed": "Failed to send email"
   }
 }

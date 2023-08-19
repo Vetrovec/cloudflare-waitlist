@@ -2,19 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import ClipboardButton from "./ClipboardButton";
 import { env } from "@/env.client.mjs";
-import content from "../content.json";
-import messages from "@/dictionaries/en.json";
+import content from "@/content.json";
+import messages from "@/locales/en.json";
 
 interface UserDetailsProps {
-  welcomeEmailError?: boolean;
   email: string;
+  errorMessage?: string | null;
   referralCode: string;
   createdAt: Date;
 }
 
 export default function UserDetails({
-  welcomeEmailError,
   email,
+  errorMessage,
   referralCode,
   createdAt,
 }: UserDetailsProps) {
@@ -46,11 +46,9 @@ export default function UserDetails({
             </span>
           </div>
         </div>
-        {welcomeEmailError && (
+        {errorMessage && (
           <div className="px-2 py-4 border-t">
-            <div className="text-center text-error text-xs">
-              {messages.userDetails.welcomeEmailError}
-            </div>
+            <div className="text-center text-error text-xs">{errorMessage}</div>
           </div>
         )}
         <div className="flex flex-col items-center px-2 py-4 border-t gap-4">

@@ -1,8 +1,8 @@
-import "./globals.css";
+import "../globals.css";
 import { Metadata } from "next";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
-import content from "../content.json";
+import content from "@/content.json";
 
 const font = Poppins({
   subsets: ["latin"],
