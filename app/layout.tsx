@@ -1,7 +1,7 @@
 import "./globals.css";
-import { Poppins } from "next/font/google";
-import Image from "next/image";
 import { Metadata } from "next";
+import Image from "next/image";
+import { Poppins } from "next/font/google";
 import content from "../content.json";
 
 const font = Poppins({

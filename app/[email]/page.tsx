@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { getDB } from "../db";
-import UserDetails from "../components/UserDetails";
-import { SubmitEmailError } from "../constants/enums";
+import { getDB } from "@/db";
+import UserDetails from "@/components/UserDetails";
+import { SubmitEmailError } from "@/constants/enums";
 
 export const runtime = "edge";
 

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import SignUpForm from "./components/SignUpForm";
-import messages from "../messages.json";
+import SignUpForm from "@/components/SignUpForm";
+import messages from "@/dictionaries/en.json";
 
 export const runtime = "edge";
 

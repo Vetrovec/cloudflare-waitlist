@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import ClipboardButton from "./ClipboardButton";
-import { env } from "../envClient.mjs";
-import content from "../../content.json";
-import messages from "../../messages.json";
+import { env } from "@/env.client.mjs";
+import content from "../content.json";
+import messages from "@/dictionaries/en.json";
 
 interface UserDetailsProps {
   welcomeEmailError?: boolean;
