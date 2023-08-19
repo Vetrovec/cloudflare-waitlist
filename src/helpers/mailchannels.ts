@@ -1,3 +1,5 @@
+// https://github.com/cloudflare/pages-plugins/blob/main/packages/mailchannels/api/index.ts
+
 interface EmailAddress {
   email: string;
   name?: string;

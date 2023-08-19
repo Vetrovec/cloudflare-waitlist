@@ -9,7 +9,7 @@
     "export:watch": "next-on-pages --watch",
     "migrate": "wrangler d1 execute waitlist --local --file migrations/001_setup.sql",
     "lint": "next lint",
-    "format": "prettier --write app",
+    "format": "prettier --write src",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {

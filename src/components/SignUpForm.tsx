@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Turnstile from "./Turnstile";
-import { env } from "../envClient.mjs";
-import messages from "../../messages.json";
+import { env } from "@/env.client.mjs";
+import messages from "@/locales/en.json";
 
 interface SignUpFormProps {
   referral?: string;

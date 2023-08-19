@@ -21,11 +21,11 @@ You can replace all images in the `/public` directory. Make sure to keep the sam
 
 **Language**
 
-Most phrases can be found in the `/messages.json` file. Some texts can be configured in `/content.json` file, for example title, description and welcome email properties. Welcome email content is configured separately.
+Most phrases can be found in the `/locales/en.json` file. Some texts can be configured in `/app-config.json` file, for example title, description and welcome email properties. Welcome email content is stored and configured separately.
 
 **Links**
 
-Links containting socials can be found in `/content.json` file. Feel free to remove or add more links, just make sure to add the corresponding icons to `/public/socials` directory and keep the same 24x24 dimensions. You can also hide Github top right corner badge by changing _showGithubBadge_ in `/content.json` to false.
+Links containting socials can be found in `/app-config.json` file. Feel free to remove or add more links, just make sure to add the corresponding icons to `/public/socials` directory and keep the same 24x24 dimensions. You can also hide Github top right corner badge by changing _showGithubBadge_ in `/app-config.json` to false.
 
 **Colors**
 

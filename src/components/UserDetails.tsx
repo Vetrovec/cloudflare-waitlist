@@ -1,20 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import ClipboardButton from "./ClipboardButton";
-import { env } from "../envClient.mjs";
-import content from "../../content.json";
-import messages from "../../messages.json";
+import appConfig from "@/app-config.json";
+import { env } from "@/env.client.mjs";
+import messages from "@/locales/en.json";
 
 interface UserDetailsProps {
-  welcomeEmailError?: boolean;
   email: string;
+  errorMessage?: string | null;
   referralCode: string;
   createdAt: Date;
 }
 
 export default function UserDetails({
-  welcomeEmailError,
   email,
+  errorMessage,
   referralCode,
   createdAt,
 }: UserDetailsProps) {
@@ -46,11 +46,9 @@ export default function UserDetails({
             </span>
           </div>
         </div>
-        {welcomeEmailError && (
+        {errorMessage && (
           <div className="px-2 py-4 border-t">
-            <div className="text-center text-error text-xs">
-              {messages.userDetails.welcomeEmailError}
-            </div>
+            <div className="text-center text-error text-xs">{errorMessage}</div>
           </div>
         )}
         <div className="flex flex-col items-center px-2 py-4 border-t gap-4">
@@ -78,13 +76,13 @@ export default function UserDetails({
             </span>
           </Link>
         </div>
-        {content.socials.length > 0 && (
+        {appConfig.socials.length > 0 && (
           <div className="flex flex-col items-center border-t pt-6 gap-2">
             <span className="text-gray-800 text-xs">
               {messages.userDetails.getInTouch}
             </span>
             <div className="flex gap-4">
-              {content.socials.map((social) => (
+              {appConfig.socials.map((social) => (
                 <a key={social.name} href={social.url} target="_blank">
                   <Image
                     width={24}

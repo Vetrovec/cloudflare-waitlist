@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { getDB } from "../db";
-import { sendEmail } from "../helpers/mailchannels";
-import { generateCode, validateEmail } from "../helpers/misc";
-import { verifyRequest } from "../helpers/turnstile";
-import { env } from "../envServer.mjs";
-import content from "../../content.json";
-import { SubmitEmailError } from "../constants/enums";
+import appConfig from "@/app-config.json";
+import { getDB } from "@/db";
+import { env } from "@/env.server.mjs";
+import { SubmitEmailError } from "@/constants/enums";
+import { sendEmail } from "@/helpers/mailchannels";
+import { generateCode, validateEmail } from "@/helpers/misc";
+import { verifyRequest } from "@/helpers/turnstile";
 
 export const runtime = "edge";
 
@@ -79,9 +79,9 @@ export async function POST(request: Request) {
         ],
         from: {
           email: env.WELCOME_EMAIL.ADDRESS,
-          name: content.welcomeEmail.name,
+          name: appConfig.welcomeEmail.name,
         },
-        subject: content.welcomeEmail.subject,
+        subject: appConfig.welcomeEmail.subject,
         content: [
           {
             type: "text/html",
