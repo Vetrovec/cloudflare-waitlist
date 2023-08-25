@@ -21,6 +21,7 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const email = formData.get("email");
   const referralCode = formData.get("ref");
+
   if (typeof email !== "string" || !validateEmail(email)) {
     return error(SubmitEmailError.invalidEmail);
   }
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
 
   try {
     let referredBy: string | null = null;
+
     if (typeof referralCode === "string") {
       referredBy = await getDB()
         .selectFrom("waitlist_entries")
@@ -46,6 +48,7 @@ export async function POST(request: Request) {
         .executeTakeFirst()
         .then((row) => row?.email ?? null);
     }
+
     const result = await getDB()
       .insertInto("waitlist_entries")
       .columns(["email", "code", "referred_by", "created_at"])
@@ -61,11 +64,13 @@ export async function POST(request: Request) {
     let welcomeEmailError = false;
     if (env.WELCOME_EMAIL.ENABLED && result[0]?.numInsertedOrUpdatedRows) {
       const displayName = email.split("@")[0];
+
       const mailContentResponse = await fetch(env.WELCOME_EMAIL.CONTENT_URL);
       const mailContentText = await mailContentResponse.text();
       const formattedMail = mailContentText
         .replaceAll("{display_name}", displayName)
         .replaceAll("{base_url}", env.BASE_URL);
+
       const result = await sendEmail({
         personalizations: [
           {
