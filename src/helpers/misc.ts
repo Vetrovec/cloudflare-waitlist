@@ -4,8 +4,12 @@ export function validateEmail(email: string) {
 }
 
 export function generateCode() {
-  const array = new Uint32Array(4);
+  const minValue = BigInt(2_238_976_117); // "1111111" in base 36
+  const maxValue = BigInt(78_364_164_095); // "ZZZZZZZ" in base 36
+
+  const array = new BigUint64Array(1);
   crypto.getRandomValues(array);
-  const value = array.reduce((a, b) => a + b, 0xffffffff);
+  const value = minValue + (array[0] % BigInt(maxValue - minValue + BigInt(1)));
+
   return value.toString(36).toUpperCase();
 }
