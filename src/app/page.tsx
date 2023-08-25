@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SignUpForm from "@/components/SignUpForm";
+import { localizeError } from "@/helpers/locale";
 import messages from "@/locales/en.json";
 
 export const runtime = "edge";
@@ -14,11 +15,9 @@ type HomeProps = {
 export default function Home({ searchParams }: HomeProps) {
   const referral = searchParams["ref"];
   const error = searchParams["error"];
-  const errorMessage = !error
-    ? null
-    : error in messages.errors
-    ? messages.errors[error as keyof typeof messages.errors]
-    : messages.errors.fallback;
+
+  const errorMessage = error ? localizeError(error) : null;
+
   return (
     <main className="grid h-full xl:grid-cols-2">
       <div className="hidden xl:block p-16 bg-base background-clip-path">

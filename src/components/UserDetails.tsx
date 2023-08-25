@@ -20,6 +20,7 @@ export default function UserDetails({
 }: UserDetailsProps) {
   const referralUrl = new URL(env.BASE_URL);
   referralUrl.searchParams.set("ref", referralCode);
+
   return (
     <div className="relative p-6 rounded-2xl mt-10 bg-base">
       <div className="absolute top-0 inset-x-1/2 transform -translate-x-2/4 -translate-y-2/4 w-20 h-20 flex justify-center items-center rounded-full bg-base">
